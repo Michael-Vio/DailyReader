@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/nav_all_book_fragment">
+
+    <fragment
+        android:id="@+id/nav_all_book_fragment"
+        android:name="com.example.dailyreader.fragment.AllBookFragment"
+        android:label="All Book" />
+    <fragment
+        android:id="@+id/nav_add_book_fragment"
+        android:name="com.example.dailyreader.fragment.AddBooksFragment"
+        android:label="Add Books" />
+    <fragment
+        android:id="@+id/nav_logout_fragment"
+        android:name="com.example.dailyreader.fragment.LogoutFragment"
+        android:label="Logout" />
+    <fragment
+        android:id="@+id/nav_map_fragment"
+        android:name="com.example.dailyreader.fragment.MapFragment"
+        android:label="Map" />
+    <fragment
+        android:id="@+id/nav_report_fragment"
+        android:name="com.example.dailyreader.fragment.ReportFragment"
+        android:label="Report" />
+    <fragment
+        android:id="@+id/nav_weather_fragment"
+        android:name="com.example.dailyreader.fragment.WeatherFragment"
+        android:label="Weather" />
+    <fragment
+        android:id="@+id/nav_sync_fragment"
+        android:name="com.example.dailyreader.fragment.SyncFragment"
+        android:label="Synchronize" />
+
+</navigation>
