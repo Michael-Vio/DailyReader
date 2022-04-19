@@ -1,6 +1,7 @@
 package com.example.dailyreader.adapter;
 
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dailyreader.ReadActivity;
 import com.example.dailyreader.databinding.ItemLayoutBinding;
 import com.example.dailyreader.module.Book;
 
@@ -33,6 +35,13 @@ public class AllBookFragmentAdapter extends RecyclerView.Adapter<AllBookFragment
         final Book aBook = books.get(position);
         viewHolder.binding.bookName.setText(aBook.getBookName());
         viewHolder.binding.bookAuthor.setText(aBook.getBookAuthor());
+        viewHolder.binding.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), ReadActivity.class);
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
 

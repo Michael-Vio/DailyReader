@@ -19,6 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ReadActivity"
+            android:label="Reading"
+            android:theme= "@style/Theme.NavigationJava.NoActionBar"/>
     </application>
 
 </manifest>
