@@ -28,6 +28,12 @@
             android:title="Logout" />
     </group>
 
+    <item
+        android:id="@+id/app_bar_search"
+        android:icon="@drawable/ic_search"
+        android:title="Search"
+        app:actionViewClass="android.widget.SearchView" />
+
 </menu>
 
 
