@@ -1,5 +1,7 @@
 package com.example.dailyreader;
 
+import com.example.dailyreader.fragment.WeatherRoot;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 

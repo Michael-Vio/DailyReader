@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.dailyreader.WeatherApi;
 import com.example.dailyreader.databinding.WeatherFragmentBinding;
-import com.example.dailyreader.WeatherRoot;
 
 
 import retrofit2.Call;
@@ -47,12 +46,20 @@ public class WeatherFragment extends Fragment {
         Call<WeatherRoot> call = weatherApi.getWeather();
 
         //Call
-        call.enqueue(new Callback<WeatherRoot>()
-        {
+        call.enqueue(new Callback<WeatherRoot>() {
             @Override
             public void onResponse(Call<WeatherRoot> call, Response<WeatherRoot> response){
                 WeatherRoot weatherRoot = response.body();
-                System.out.println();
+
+                //temp change
+                double temp = weatherRoot.getMain().getTemp() - 273.15;
+                int pressure = weatherRoot.getMain().getPressure();
+                int humidity = weatherRoot.getMain().getHumidity();
+
+                //show temp
+                weatherBinding.weatherTemp.setText(String.valueOf((int)temp));
+                weatherBinding.pressure.setText(String.valueOf(pressure));
+                weatherBinding.humidity.setText(String.valueOf(humidity));
             }
 
             @Override
