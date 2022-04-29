@@ -68,7 +68,7 @@ public class BookRepository {
         });
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public CompletableFuture<Book> findById(final int bookId) {
+    public CompletableFuture<Book> findByIdFuture(final int bookId) {
         return CompletableFuture.supplyAsync(new Supplier<Book>() {
             @Override
             public Book get() {

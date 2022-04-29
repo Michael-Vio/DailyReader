@@ -3,6 +3,7 @@ package com.example.dailyreader.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,7 @@ public class AllBookFragmentAdapter extends RecyclerView.Adapter<AllBookFragment
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ReadActivity.class);
-                intent.putExtra("book", book.getFilepath());
+                intent.putExtra("bookInfo", book.getUid());
                 v.getContext().startActivity(intent);
             }
         });

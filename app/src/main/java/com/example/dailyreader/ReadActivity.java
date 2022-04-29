@@ -16,7 +16,13 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.dailyreader.entity.Book;
+import com.example.dailyreader.viewmodel.BookViewModel;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +30,8 @@ import java.io.InputStreamReader;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 
 public class ReadActivity extends AppCompatActivity{
@@ -35,6 +43,9 @@ public class ReadActivity extends AppCompatActivity{
     private int positionIndex = 0;
     private PopupWindow popupWindow;
     private GestureDetector gestureDetector;
+    private int finishReadPosition;
+    private BookViewModel bookViewModel;
+    private Book book;
 
 
 
@@ -42,7 +53,7 @@ public class ReadActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read);
-
+        bookViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(BookViewModel.class);
 
         View v = this.getWindow().getDecorView();
         v.setOnTouchListener(new View.OnTouchListener() {
@@ -63,6 +74,14 @@ public class ReadActivity extends AppCompatActivity{
 
             }
         };
+        int bookId= getIntent().getIntExtra("bookInfo", 0);
+        CompletableFuture<Book> bookCompletableFuture = bookViewModel.findByIdFuture(bookId);
+        try {
+            book = bookCompletableFuture.get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
         readPageView = findViewById(R.id.read_page_view);
         gestureDetector= new GestureDetector(this, new GestureListener());
         readPageView.setOnTouchListener(touchListener);
@@ -73,12 +92,13 @@ public class ReadActivity extends AppCompatActivity{
                 return false;
             }
         });
-        //get filepath and book name from home fragment adapter
-        String book = getIntent().getStringExtra("book");
-        startPosition.add(0);
 
-        loadBook(book);
-        loadPage(0, -2);
+
+
+
+        loadBook(book.getFilepath());
+        finishReadPosition = book.getReadPosition();
+        loadPage(finishReadPosition, -2);
     }
 
 
@@ -87,7 +107,6 @@ public class ReadActivity extends AppCompatActivity{
 
         try {
             InputStream in = new FileInputStream(book);
-//            InputStream in = getAssets().open("HP.txt");
             reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             reader.read(buffer);
         } catch (IOException e) {
@@ -98,10 +117,18 @@ public class ReadActivity extends AppCompatActivity{
     }
 
     private void loadPage(int position, int limit) {
-        buffer.position(position);
-        if (limit != -2) {
-            buffer.limit(limit);
-        }
+//        if (position != 0) {
+//            try {
+//                reader.skip(position);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+            buffer.position(position);
+            if (limit != -2) {
+                buffer.limit(limit);
+            }
+//        }
         readPageView.setText(buffer);
 
     }
@@ -132,6 +159,8 @@ public class ReadActivity extends AppCompatActivity{
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                book.setReadPosition(finishReadPosition);
+                bookViewModel.update(book);
                 Intent intent = new Intent(ReadActivity.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -147,15 +176,15 @@ public class ReadActivity extends AppCompatActivity{
         popupWindow.showAsDropDown(findViewById(R.id.read_activity_layout));
     }
 
-    public void nextPage() {
-        endPosition += readPageView.getCharNum();
-        if (endPosition >= 8000) {
-            updateBuffer();
-            endPosition = 0;
-        }
-        loadPage(endPosition, -2);
-        readPageView.resize();
-
+//    public void nextPage() {
+//        endPosition += readPageView.getCharNum();
+//        if (endPosition >= 8000) {
+//            updateBuffer();
+//            endPosition = 0;
+//        }
+//        loadPage(endPosition, -2);
+//        readPageView.resize();
+//
 //        endPosition += readPageView.getCharNum();
 //        if (!startPosition.contains(endPosition)) {
 //            startPosition.add(endPosition);
@@ -168,7 +197,7 @@ public class ReadActivity extends AppCompatActivity{
 ////        Toast.makeText(getApplicationContext(),"SP" + positionIndex + "EP" ,Toast.LENGTH_SHORT).show();
 //
 //        Toast.makeText(getApplicationContext(),"SP" + startPosition + "EP" + endPosition,Toast.LENGTH_SHORT).show();
-    }
+//    }
 
     class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
@@ -207,25 +236,30 @@ public class ReadActivity extends AppCompatActivity{
         public boolean onFling(MotionEvent e1, MotionEvent e2,
                                float velocityX, float velocityY) {
             if (e1.getX() - e2.getX() > 50) {
-                endPosition += readPageView.getCharNum();
-                if (endPosition >= 8000) {
-                    updateBuffer();
-                    endPosition = 0;
-                }
-                loadPage(endPosition, -2);
-                readPageView.resize();
-            }
-            if (e2.getX() - e1.getX() > 50) {
-                if (positionIndex > 0) {
-                    loadPage(startPosition.get(positionIndex-1), -2);
+                if (finishReadPosition == new File(book.getFilepath()).length()) {
+                    Toast.makeText(getApplicationContext(),"The last page" ,Toast.LENGTH_SHORT).show();
+                } else {
+                    endPosition += readPageView.getCharNum();
+                    finishReadPosition += endPosition;
+                    if (endPosition >= 8000) {
+                        updateBuffer();
+                        endPosition = 0;
+                    }
+                    loadPage(endPosition, -2);
                     readPageView.resize();
-                    positionIndex--;
-                } else if (positionIndex == 0){
-                    loadPage(0, -2);
-                    readPageView.resize();
-                    Toast.makeText(getApplicationContext(),"first page" ,Toast.LENGTH_SHORT).show();
                 }
             }
+//            if (e2.getX() - e1.getX() > 50) {
+//                if (positionIndex > 0) {
+//                    loadPage(startPosition.get(positionIndex-1), -2);
+//                    readPageView.resize();
+//                    positionIndex--;
+//                } else if (positionIndex == 0){
+//                    loadPage(0, -2);
+//                    readPageView.resize();
+//                    Toast.makeText(getApplicationContext(),"first page" ,Toast.LENGTH_SHORT).show();
+//                }
+//            }
 
             return true;
         }

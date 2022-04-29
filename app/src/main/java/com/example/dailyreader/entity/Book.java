@@ -1,5 +1,7 @@
 package com.example.dailyreader.entity;
 
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

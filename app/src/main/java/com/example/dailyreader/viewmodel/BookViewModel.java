@@ -28,7 +28,7 @@ public class BookViewModel extends AndroidViewModel {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public CompletableFuture<Book> findByIdFuture(final int bookId){
-        return bRepository.findById(bookId);
+        return bRepository.findByIdFuture(bookId);
     }
     public LiveData<List<Book>> getAllBooks() {
 
@@ -50,6 +50,7 @@ public class BookViewModel extends AndroidViewModel {
 
         bRepository.updateBook(book);
     }
+
 
 }
 
