@@ -6,9 +6,13 @@
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/drawable/ic_star.xml" value="0.1" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/drawable/side_nav_bar.xml" value="0.1" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/add_books.xml" value="0.1" />
+        <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/all_book_fragment.xml" value="0.24947916666666667" />
+        <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/all_book_item_layout.xml" value="0.6" />
+        <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/file_item_layout.xml" value="0.1638888888888889" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/item_layout.xml" value="0.536" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/logout_fragment.xml" value="0.1" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/nav_header_main.xml" value="0.1" />
+        <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/set_goal_popup_window.xml" value="0.1638888888888889" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/synchronize.xml" value="0.1" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/weather_fragment.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/menu/navigation_menu.xml" value="0.24947916666666667" />

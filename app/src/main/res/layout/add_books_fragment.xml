@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/back_btn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="Go back"
+        app:srcCompat="@drawable/back_arrow" />
+
     <TextView
-        android:id="@+id/add_books"
+        android:id="@+id/path"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="This is add books"
-        android:gravity="center_horizontal"/>
+        android:gravity="center_horizontal"
+        android:textSize="20dp" />
+
+    <ListView
+        android:id="@+id/folder_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+
 </LinearLayout>

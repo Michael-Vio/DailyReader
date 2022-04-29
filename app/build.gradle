@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 31
 
     defaultConfig {
         applicationId "com.example.dailyreader"
-        minSdk 31
-        targetSdk 32
+        minSdk 24
+        targetSdk 29
         versionCode 1
         versionName "1.0"
 
@@ -46,7 +46,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
 
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.cardview:cardview:1.0.0'
 
     //Retrofit and weather api

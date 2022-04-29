@@ -1,55 +1,73 @@
 package com.example.dailyreader.fragment;
 
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dailyreader.adapter.AllBookFragmentAdapter;
 import com.example.dailyreader.databinding.AllBookFragmentBinding;
-import com.example.dailyreader.module.Book;
+import com.example.dailyreader.entity.Book;
+import com.example.dailyreader.viewmodel.BookViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class AllBookFragment extends Fragment {
-    private AllBookFragmentBinding allBookBinding;
-    private RecyclerView.LayoutManager layoutManager;
-    private List<Book> books;
+    private AllBookFragmentBinding binding;
     private AllBookFragmentAdapter adapter;
+    private BookViewModel bookViewModel;
 
 
     public AllBookFragment () {}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        allBookBinding = allBookBinding.inflate(inflater, container, false);
-        View view = allBookBinding.getRoot();
-        books = new ArrayList<Book>();
-        books = Book.createContactsList();
-        adapter = new AllBookFragmentAdapter(books);
-        allBookBinding.allBookRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(),LinearLayoutManager.VERTICAL));
+        binding = AllBookFragmentBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        allBookBinding.allBookRecyclerView.setAdapter(adapter);
-        layoutManager = new LinearLayoutManager(getContext());
-        allBookBinding.allBookRecyclerView.setLayoutManager(layoutManager);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        binding.allBookRecyclerView.setLayoutManager(layoutManager);
+        bookViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()).create(BookViewModel.class);
+        adapter = new AllBookFragmentAdapter(bookViewModel, new ArrayList<>());
+        binding.allBookRecyclerView.setAdapter(adapter);
 
+
+        bookViewModel.getAllBooks().observe(getViewLifecycleOwner(), new Observer<List<Book>>() {
+            @Override
+            public void onChanged(List<Book> books) {
+
+                adapter.setBooks(books);
+            }
+        });
+
+        binding.allBookRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(),LinearLayoutManager.VERTICAL));
+
+        binding.allBookRecyclerView.setHasFixedSize(true);
 
         return view;
     }
 
 
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        allBookBinding = null;
+        binding = null;
     }
 
 

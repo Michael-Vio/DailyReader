@@ -6,6 +6,7 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 
+
 import com.example.dailyreader.DAO.BookDAO;
 import com.example.dailyreader.database.BookDatabase;
 import com.example.dailyreader.entity.Book;
@@ -14,9 +15,11 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
+
 public class BookRepository {
-    private BookDAO bookDao;
-    private LiveData<List<Book>> allBooks;
+    private final BookDAO bookDao;
+    private final LiveData<List<Book>> allBooks;
+
     public BookRepository(Application application){
         BookDatabase bookDb = BookDatabase.getInstance(application);
         bookDao = bookDb.bookDAO();
@@ -24,12 +27,15 @@ public class BookRepository {
     }
     // Room executes this query on a separate thread
     public LiveData<List<Book>> getAllBooks() {
+
         return allBooks;
     }
+
     public void insert(final Book book){
         BookDatabase.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
+
                 bookDao.insert(book);
             }
         });
@@ -38,6 +44,7 @@ public class BookRepository {
         BookDatabase.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
+
                 bookDao.deleteAll();
             }
         });
@@ -46,6 +53,7 @@ public class BookRepository {
         BookDatabase.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
+
                 bookDao.delete(book);
             }
         });
@@ -54,18 +62,21 @@ public class BookRepository {
         BookDatabase.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                bookDao.updateCustomer(book);
+
+                bookDao.updateBook(book);
             }
         });
     }
     @RequiresApi(api = Build.VERSION_CODES.N)
-    public CompletableFuture<Book> findByIDFuture(final int bookId) {
+    public CompletableFuture<Book> findById(final int bookId) {
         return CompletableFuture.supplyAsync(new Supplier<Book>() {
             @Override
             public Book get() {
-                return bookDao.findByID(bookId);
+                return bookDao.findById(bookId);
             }
         }, BookDatabase.databaseWriteExecutor);
     }
+
 }
+
 

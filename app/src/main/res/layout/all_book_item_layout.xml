@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="110dp"
     android:layout_margin="5dp"
     android:clickable="true"
     android:foreground="?selectableItemBackground"
@@ -20,54 +20,63 @@
         card_view:layout_constraintBottom_toTopOf="@+id/book_name"
         card_view:layout_constraintTop_toTopOf="@+id/book_name">
 
+
         <TextView
             android:id="@+id/book_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="188dp"
-            android:layout_marginBottom="56dp"
+            android:layout_marginEnd="232dp"
+            android:layout_marginBottom="12dp"
             android:layout_weight="1"
-            android:text="nothing"
+            android:text="Unknown"
             android:textSize="15dp"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toEndOf="parent"
-            card_view:layout_constraintStart_toEndOf="@+id/book_cover_page" />
-
-        <TextView
-            android:id="@+id/book_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:layout_marginEnd="4dp"
-            android:layout_weight="1"
-            android:text="nothing2"
-            android:textSize="15dp"
-            card_view:layout_constraintEnd_toEndOf="@+id/book_name"
-            card_view:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/book_cover_page"
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="7dp"
-            android:layout_marginEnd="78dp"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:src="@drawable/side_nav_bar"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintEnd_toStartOf="@+id/book_name"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent" />
+            card_view:layout_constraintBottom_toTopOf="@+id/goal_view"
+            card_view:layout_constraintEnd_toEndOf="parent" />
 
         <Button
-            android:id="@+id/button"
-            android:layout_width="78dp"
-            android:layout_height="80dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="8dp"
+            android:id="@+id/set_goal"
+            android:layout_width="77dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
             android:text="Set Goal"
             android:textSize="10dp"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/item_delete"
+            android:layout_width="47dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:src="@android:drawable/ic_delete"
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/cover_page"
+            android:layout_width="80dp"
+            android:layout_height="92dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="4dp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent"
+            card_view:srcCompat="@drawable/side_nav_bar" />
+
+        <TextView
+            android:id="@+id/goal_view"
+            android:layout_width="153dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginBottom="8dp"
+            android:text="No goal has set"
+            android:textSize="12dp"
+            card_view:layout_constraintBottom_toBottomOf="parent"
+            card_view:layout_constraintStart_toStartOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
