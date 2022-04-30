@@ -11,6 +11,47 @@
         android:layout_height="wrap_content"
         android:text="for weather" />
 
+    <TextView
+        android:id="@+id/weatherTempContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Melbourne temperature(C):"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/weatherTemp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Waiting..."
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/pressureContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Atmospheric pressure in Melbourne(hPa):"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/pressure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Waiting..."
+        android:textSize="20sp" />
+
+
+    <TextView
+        android:id="@+id/humidityContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Humidity in Melbourne(%):"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/humidity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Waiting..."
+        android:textSize="20sp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_book_recycler_view"
         android:layout_width="match_parent"
