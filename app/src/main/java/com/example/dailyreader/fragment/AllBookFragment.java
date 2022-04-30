@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.dailyreader.R;
 import com.example.dailyreader.WeatherApi;
 import com.example.dailyreader.adapter.AllBookFragmentAdapter;
 import com.example.dailyreader.databinding.AllBookFragmentBinding;
@@ -66,6 +68,10 @@ public class AllBookFragment extends Fragment {
         binding.allBookRecyclerView.setHasFixedSize(true);
 
 
+        //Set Marquee
+        TextView text_view = (TextView) view.findViewById(R.id.weatherHello);
+        text_view.setSelected(true);
+
         //Use weather API
         //https://api.openweathermap.org/data/2.5/weather?lat=37.8136&lon=144.9631&appid=2e1018bb418dd391d11b25c5a7fad3a0
         Retrofit retrofit = new Retrofit.Builder()
@@ -89,9 +95,14 @@ public class AllBookFragment extends Fragment {
                 int humidity = weatherRoot.getMain().getHumidity();
 
                 //show temp
-                binding.weatherTemp.setText(String.valueOf((int)temp));
-                binding.pressure.setText(String.valueOf(pressure));
-                binding.humidity.setText(String.valueOf(humidity));
+                binding.weatherHello.setText("Melbourne temperature(C): "+ String.valueOf((int)temp)
+                                                + "   Atmospheric pressure in Melbourne: " + String.valueOf(pressure) + "hPa"
+                                                +"    Humidity in Melbourne: " + String.valueOf(humidity) + "%");
+
+
+                /*binding.weatherTemp.setText("Melbourne temperature(C): "+ String.valueOf((int)temp));
+                binding.pressure.setText("Atmospheric pressure in Melbourne(hPa): " + String.valueOf(pressure));
+                binding.humidity.setText("Humidity in Melbourne(%):" + String.valueOf(humidity));*/
             }
 
             @Override

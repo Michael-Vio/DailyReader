@@ -7,50 +7,17 @@
     android:orientation="vertical">
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/weatherHello"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="for weather" />
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:marqueeRepeatLimit="marquee_forever"
 
-    <TextView
-        android:id="@+id/weatherTempContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Melbourne temperature(C):"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/weatherTemp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Waiting..."
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/pressureContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Atmospheric pressure in Melbourne(hPa):"
-        android:textSize="20sp" />
-    <TextView
-        android:id="@+id/pressure"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Waiting..."
-        android:textSize="20sp" />
-
-
-    <TextView
-        android:id="@+id/humidityContent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Humidity in Melbourne(%):"
-        android:textSize="20sp" />
-    <TextView
-        android:id="@+id/humidity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Waiting..."
-        android:textSize="20sp" />
+        android:text="Today's weather"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_book_recycler_view"
