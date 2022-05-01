@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "473501974866",
+    "project_id": "dailyreader-defd2",
+    "storage_bucket": "dailyreader-defd2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:473501974866:android:12dd3a3b357625617a3a8b",
+        "android_client_info": {
+          "package_name": "com.example.dailyreader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "473501974866-q46jj9g3gojroice8aqimdo35cmjbo48.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3s7CRDg6btAnnyx5hh0XXuQn3ez-Bf48"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "473501974866-q46jj9g3gojroice8aqimdo35cmjbo48.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
