@@ -19,7 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dailyreader.entity.Book;
+import com.example.dailyreader.entity.ReadTime;
 import com.example.dailyreader.viewmodel.BookViewModel;
+import com.example.dailyreader.viewmodel.ReadTimeViewModel;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,7 +31,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -40,12 +45,16 @@ public class ReadActivity extends AppCompatActivity{
     private final CharBuffer buffer = CharBuffer.allocate(8000);
     private int endPosition = 0;
     private final ArrayList<Integer> startPosition = new ArrayList<Integer>();
-    private int positionIndex = 0;
+    private final int positionIndex = 0;
     private PopupWindow popupWindow;
     private GestureDetector gestureDetector;
     private int finishReadPosition;
     private BookViewModel bookViewModel;
+    private ReadTimeViewModel readTimeViewModel;
     private Book book;
+    private ReadTime readTime;
+    private Date startTime;
+
 
 
 
@@ -53,7 +62,23 @@ public class ReadActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read);
+
+        readTimeViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(ReadTimeViewModel.class);
         bookViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(BookViewModel.class);
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        startTime = new Date(System.currentTimeMillis());
+        String time = dateFormat.format(startTime);
+//        Toast.makeText(this, currentTime, Toast.LENGTH_SHORT).show();
+        String[] dateAndTime = time.split(" ");
+        String date = dateAndTime[0];
+        CompletableFuture<ReadTime> readTimeCompletableFuture = readTimeViewModel.findByDateFuture(date);
+        try {
+            readTime = readTimeCompletableFuture.get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
         View v = this.getWindow().getDecorView();
         v.setOnTouchListener(new View.OnTouchListener() {
@@ -66,14 +91,10 @@ public class ReadActivity extends AppCompatActivity{
         View.OnTouchListener touchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                // pass the events to the gesture detector
-                // a return value of true means the detector is handling it
-                // a return value of false means the detector didn't
-                // recognize the event
                 return gestureDetector.onTouchEvent(event);
-
             }
         };
+
         int bookId= getIntent().getIntExtra("bookInfo", 0);
         CompletableFuture<Book> bookCompletableFuture = bookViewModel.findByIdFuture(bookId);
         try {
@@ -92,8 +113,6 @@ public class ReadActivity extends AppCompatActivity{
                 return false;
             }
         });
-
-
 
 
         loadBook(book.getFilepath());
@@ -161,6 +180,25 @@ public class ReadActivity extends AppCompatActivity{
             public void onClick(View v) {
                 book.setReadPosition(finishReadPosition);
                 bookViewModel.update(book);
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                Date endTime = new Date(System.currentTimeMillis());
+                long difference = startTime.getTime() - endTime.getTime();
+                String time = dateFormat.format(endTime);
+                String[] dateAndTime = time.split(" ");
+                String date = dateAndTime[0];
+                int minutes = (int) ((difference % (1000 * 60 * 60)) / (1000 * 60));
+
+                if (readTime != null) {
+                    readTime.setReadDate(date);
+                    readTime.setReadTime(minutes);
+                    readTimeViewModel.update(readTime);
+                } else {
+                    readTimeViewModel.insert(new ReadTime(date, minutes));
+                }
+
+//                Toast.makeText(getApplicationContext(),date + " " + minutes ,Toast.LENGTH_SHORT).show();
+
                 Intent intent = new Intent(ReadActivity.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -172,6 +210,8 @@ public class ReadActivity extends AppCompatActivity{
                 popupWindow.dismiss();
             }
         });
+
+
 
         popupWindow.showAsDropDown(findViewById(R.id.read_activity_layout));
     }
@@ -264,6 +304,7 @@ public class ReadActivity extends AppCompatActivity{
             return true;
         }
     }
+
 }
 
 
