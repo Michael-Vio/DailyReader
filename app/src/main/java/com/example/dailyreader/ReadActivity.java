@@ -4,8 +4,11 @@ package com.example.dailyreader;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -41,18 +44,16 @@ import java.util.concurrent.ExecutionException;
 
 public class ReadActivity extends AppCompatActivity{
     private ReadPageView readPageView;
+    private ReadTimeViewModel readTimeViewModel;
+    private ReadTime readTime;
+    private BookViewModel bookViewModel;
+    private Book book;
     private BufferedReader reader;
     private final CharBuffer buffer = CharBuffer.allocate(8000);
     private int endPosition = 0;
-    private final ArrayList<Integer> startPosition = new ArrayList<Integer>();
-    private final int positionIndex = 0;
     private PopupWindow popupWindow;
     private GestureDetector gestureDetector;
     private int finishReadPosition;
-    private BookViewModel bookViewModel;
-    private ReadTimeViewModel readTimeViewModel;
-    private Book book;
-    private ReadTime readTime;
     private Date startTime;
 
 
@@ -62,7 +63,6 @@ public class ReadActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read);
-
         readTimeViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(ReadTimeViewModel.class);
         bookViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(BookViewModel.class);
 
@@ -81,6 +81,7 @@ public class ReadActivity extends AppCompatActivity{
 
 
         View v = this.getWindow().getDecorView();
+
         v.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -174,6 +175,7 @@ public class ReadActivity extends AppCompatActivity{
         popupWindow = new PopupWindow(contentView);
         popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+
         ImageView backBtn = contentView.findViewById(R.id.back_btn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,6 +205,7 @@ public class ReadActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+
         Button finishSetting = contentView.findViewById(R.id.finish);
         finishSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,48 +214,64 @@ public class ReadActivity extends AppCompatActivity{
             }
         });
 
+        Button themeWhite = contentView.findViewById(R.id.theme_white);
+        themeWhite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReadActivity.this.findViewById(R.id.read_activity_layout).setBackgroundColor(Color.WHITE);
+            }
+        });
+        Button themeGreen = contentView.findViewById(R.id.theme_green);
+        themeGreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReadActivity.this.findViewById(R.id.read_activity_layout).setBackgroundColor(Color.parseColor("#C7EDCC"));
+            }
+        });
+        Button themeOriginal = contentView.findViewById(R.id.theme_original);
+        themeOriginal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReadActivity.this.findViewById(R.id.read_activity_layout).setBackgroundColor(Color.parseColor("#BEA592"));
+            }
+        });
+        Button textSizeS = contentView.findViewById(R.id.s_button);
+        textSizeS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+            }
+        });
 
+        Button textSizeM = contentView.findViewById(R.id.m_button);
+        textSizeM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+            }
+        });
+
+        Button textSizeL = contentView.findViewById(R.id.l_button);
+        textSizeL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+            }
+        });
 
         popupWindow.showAsDropDown(findViewById(R.id.read_activity_layout));
     }
 
-//    public void nextPage() {
-//        endPosition += readPageView.getCharNum();
-//        if (endPosition >= 8000) {
-//            updateBuffer();
-//            endPosition = 0;
-//        }
-//        loadPage(endPosition, -2);
-//        readPageView.resize();
-//
-//        endPosition += readPageView.getCharNum();
-//        if (!startPosition.contains(endPosition)) {
-//            startPosition.add(endPosition);
-//            loadPage(startPosition.get(positionIndex));
-//            readPageView.resize();
-//        } else {
-//            loadPage(startPosition.get(positionIndex + 1));
-//        }
-//        positionIndex++;
-////        Toast.makeText(getApplicationContext(),"SP" + positionIndex + "EP" ,Toast.LENGTH_SHORT).show();
-//
-//        Toast.makeText(getApplicationContext(),"SP" + startPosition + "EP" + endPosition,Toast.LENGTH_SHORT).show();
-//    }
 
     class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override
         public boolean onDown(MotionEvent event) {
-            Log.d("TAG","onDown: ");
-
-            // don't return false here or else none of the other
-            // gestures will work
             return true;
         }
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
-
             return false;
         }
 
@@ -267,14 +286,12 @@ public class ReadActivity extends AppCompatActivity{
         }
 
         @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2,
-                                float distanceX, float distanceY) {
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             return false;
         }
 
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2,
-                               float velocityX, float velocityY) {
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             if (e1.getX() - e2.getX() > 50) {
                 if (finishReadPosition == new File(book.getFilepath()).length()) {
                     Toast.makeText(getApplicationContext(),"The last page" ,Toast.LENGTH_SHORT).show();

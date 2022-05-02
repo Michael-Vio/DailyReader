@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 
 
 public class ReadPageView extends androidx.appcompat.widget.AppCompatTextView {
-
     public ReadPageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
@@ -24,6 +23,7 @@ public class ReadPageView extends androidx.appcompat.widget.AppCompatTextView {
         super.onLayout(changed, left, top, right, bottom);
         resize();
     }
+
 
     /**
      * 取出当前页无法显示的字
