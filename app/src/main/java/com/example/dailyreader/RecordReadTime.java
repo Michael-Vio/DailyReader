@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dailyreader.entity.ReadTime;
@@ -16,8 +17,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -52,33 +56,12 @@ public class RecordReadTime {
         String endDate = time.split(" ")[0];
 
         writeRecord();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference reference = database.getReference("users");
-        reference.push().setValue("Hello World");
-//        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
-//        String TAG = "TTTTTest";
-//        connectedRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                boolean connected = snapshot.getValue(Boolean.class);
-//                if (connected) {
-//                    Log.d(TAG, "connected");
-//                } else {
-//                    Log.d(TAG, "not connected");
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Log.w(TAG, "Listener was cancelled");
-//            }
-//        });
-        Log.d("msg", "write to db");
+
 
     }
 
     public void writeRecord() {
-        long difference = startTime.getTime() - endTime.getTime();
+        long difference = endTime.getTime() - startTime.getTime();
         int minutes = (int)(difference % (1000 * 60 * 60)) / (1000 * 60);
         if (readTime != null) {
             readTime.setReadTime(minutes);
@@ -86,6 +69,15 @@ public class RecordReadTime {
         } else {
             readTimeViewModel.insert(new ReadTime(startDate, minutes));
         }
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        // 改成user的id的分支
+        DatabaseReference reference = database.getReference("users/1/readTimeRecords");
+        // 是否有同样的date 同样的进行累加
+        ReadTime readTime = new ReadTime(startDate, minutes);
+        reference.push().setValue(readTime);
+
+        Log.d("msg", "write to db");
     }
 
 
