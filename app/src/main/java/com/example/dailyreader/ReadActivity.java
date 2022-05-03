@@ -44,8 +44,6 @@ import java.util.concurrent.ExecutionException;
 
 public class ReadActivity extends AppCompatActivity{
     private ReadPageView readPageView;
-    private ReadTimeViewModel readTimeViewModel;
-    private ReadTime readTime;
     private BookViewModel bookViewModel;
     private Book book;
     private BufferedReader reader;
@@ -54,7 +52,7 @@ public class ReadActivity extends AppCompatActivity{
     private PopupWindow popupWindow;
     private GestureDetector gestureDetector;
     private int finishReadPosition;
-    private Date startTime;
+    private RecordReadTime recordReadTime;
 
 
 
@@ -63,32 +61,18 @@ public class ReadActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read);
-        readTimeViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(ReadTimeViewModel.class);
+
         bookViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(BookViewModel.class);
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        startTime = new Date(System.currentTimeMillis());
-        String time = dateFormat.format(startTime);
-//        Toast.makeText(this, currentTime, Toast.LENGTH_SHORT).show();
-        String[] dateAndTime = time.split(" ");
-        String date = dateAndTime[0];
-        CompletableFuture<ReadTime> readTimeCompletableFuture = readTimeViewModel.findByDateFuture(date);
-        try {
-            readTime = readTimeCompletableFuture.get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-        View v = this.getWindow().getDecorView();
-
-        v.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        });
-
+//        View v = this.getWindow().getDecorView();
+//
+//        v.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                return gestureDetector.onTouchEvent(event);
+//            }
+//        });
+//
         View.OnTouchListener touchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -121,6 +105,19 @@ public class ReadActivity extends AppCompatActivity{
         loadPage(finishReadPosition, -2);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        recordReadTime = new RecordReadTime();
+        recordReadTime.startRecord(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        recordReadTime.stopRecord();
+
+    }
 
 
     private void loadBook(String book) {
@@ -130,7 +127,7 @@ public class ReadActivity extends AppCompatActivity{
             reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             reader.read(buffer);
         } catch (IOException e) {
-            Toast.makeText(this, "The book is not exist.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "The book does not exist.", Toast.LENGTH_SHORT).show();
         }
 
         readPageView.setText(buffer);
@@ -182,25 +179,6 @@ public class ReadActivity extends AppCompatActivity{
             public void onClick(View v) {
                 book.setReadPosition(finishReadPosition);
                 bookViewModel.update(book);
-
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                Date endTime = new Date(System.currentTimeMillis());
-                long difference = startTime.getTime() - endTime.getTime();
-                String time = dateFormat.format(endTime);
-                String[] dateAndTime = time.split(" ");
-                String date = dateAndTime[0];
-                int minutes = (int) ((difference % (1000 * 60 * 60)) / (1000 * 60));
-
-                if (readTime != null) {
-                    readTime.setReadDate(date);
-                    readTime.setReadTime(minutes);
-                    readTimeViewModel.update(readTime);
-                } else {
-                    readTimeViewModel.insert(new ReadTime(date, minutes));
-                }
-
-//                Toast.makeText(getApplicationContext(),date + " " + minutes ,Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(ReadActivity.this, MainActivity.class);
                 startActivity(intent);
             }
