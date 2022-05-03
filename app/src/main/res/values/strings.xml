@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">DailyReader</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoiaGFpd2VuemhvdSIsImEiOiJjbDJxZXczajkxanFmM2JrenlnY2lwbTdoIn0.fbx_rYAA-QCdKDBKFnRHZw</string>
 </resources>
