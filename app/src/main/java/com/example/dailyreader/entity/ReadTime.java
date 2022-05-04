@@ -13,11 +13,11 @@ public class ReadTime {
     @ColumnInfo(name = "read_date")
     @NonNull
     public String readDate;
+
     @ColumnInfo(name = "read_time")
-    @NonNull
     public int readTime;
 
-    public ReadTime( String readDate,  int readTime) {
+    public ReadTime(@NonNull String readDate, int readTime) {
         this.readDate = readDate;
         this.readTime = readTime;
     }

@@ -5,10 +5,14 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.dailyreader.DAO.ReadTimeDAO;
 import com.example.dailyreader.DAO.ReadTimeFirebaseDAO;
 import com.example.dailyreader.entity.ReadTime;
+import com.example.dailyreader.viewmodel.ReadTimeViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,6 +23,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -27,6 +32,11 @@ public class RecordReadTime {
     private Date startTime;
     private Date endTime;
     private String startDate;
+    private ReadTimeViewModel readTimeViewModel;
+
+    public RecordReadTime(ReadTimeViewModel readTimeViewModel) {
+        this.readTimeViewModel = readTimeViewModel;
+    }
 
     public void startRecord() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
@@ -46,32 +56,34 @@ public class RecordReadTime {
 
         long difference = endTime.getTime() - startTime.getTime();
         int minutes = (int) (difference % (1000 * 60 * 60)) / (1000 * 60);
-        ReadTimeFirebaseDAO readTimeDAO = new ReadTimeFirebaseDAO(startDate);
+        ReadTimeFirebaseDAO readTimeFirebaseDAO = new ReadTimeFirebaseDAO(startDate);
 //        readTimeDAO.upload(startDate, minutes);
+        ReadTime readTime = new ReadTime(startDate, minutes);
+        readTimeViewModel.insert(readTime);
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users").child("records");
 
-// Attach a listener to read the data at our posts reference
-        ref.child(startDate).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Integer totalReadMinute = dataSnapshot.child("readTime").getValue(int.class);
-                if (totalReadMinute!=null) {
-                    int min = totalReadMinute + minutes;
-                    readTimeDAO.upload(startDate, min);
-                    Log.d("xxx", totalReadMinute + "");
-                } else {
-                    ReadTime readTime = new ReadTime(startDate, minutes);
-                    readTimeDAO.add(readTime);
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
+//        ref.child(startDate).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                Integer totalReadMinute = dataSnapshot.child("readTime").getValue(int.class);
+//                if (totalReadMinute!=null) {
+//                    int min = totalReadMinute + minutes;
+//                    readTimeFirebaseDAO.upload(startDate, min);
+//                    Log.d("xxx", totalReadMinute + "");
+//                } else {
+////                    ReadTime readTime = new ReadTime(startDate, minutes);
+//                    readTimeFirebaseDAO.add(readTime);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//                System.out.println("The read failed: " + databaseError.getCode());
+//            }
+//        });
 
 
 

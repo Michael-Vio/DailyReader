@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dailyreader.entity.Book;
 import com.example.dailyreader.viewmodel.BookViewModel;
+import com.example.dailyreader.viewmodel.ReadTimeViewModel;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,6 +37,7 @@ import java.util.concurrent.ExecutionException;
 
 public class ReadActivity extends AppCompatActivity{
     private ReadPageView readPageView;
+    private ReadTimeViewModel readTimeViewModel;
     private BookViewModel bookViewModel;
     private Book book;
     private BufferedReader reader;
@@ -55,7 +57,7 @@ public class ReadActivity extends AppCompatActivity{
         setContentView(R.layout.activity_read);
 
         bookViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(BookViewModel.class);
-
+        readTimeViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(ReadTimeViewModel.class);
 //        View v = this.getWindow().getDecorView();
 //
 //        v.setOnTouchListener(new View.OnTouchListener() {
@@ -100,7 +102,7 @@ public class ReadActivity extends AppCompatActivity{
     @Override
     protected void onStart() {
         super.onStart();
-        recordReadTime = new RecordReadTime();
+        recordReadTime = new RecordReadTime(readTimeViewModel);
         recordReadTime.startRecord();
     }
 

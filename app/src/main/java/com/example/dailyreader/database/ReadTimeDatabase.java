@@ -12,7 +12,7 @@ import com.example.dailyreader.entity.ReadTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {ReadTime.class}, version = 1, exportSchema = false)
+@Database(entities = {ReadTime.class}, version = 2, exportSchema = false)
 public abstract class ReadTimeDatabase extends RoomDatabase {
     public abstract ReadTimeDAO readTimeDAO();
     private static ReadTimeDatabase INSTANCE;
