@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.dailyreader.DAO.ReadTimeDAO;
 import com.example.dailyreader.entity.ReadTime;
@@ -12,7 +13,7 @@ import com.example.dailyreader.entity.ReadTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {ReadTime.class}, version = 2, exportSchema = false)
+@Database(entities = {ReadTime.class}, version = 1, exportSchema = false)
 public abstract class ReadTimeDatabase extends RoomDatabase {
     public abstract ReadTimeDAO readTimeDAO();
     private static ReadTimeDatabase INSTANCE;
@@ -28,4 +29,34 @@ public abstract class ReadTimeDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
+
+
+    //Examples for reading time to test the report screen
+    private static RoomDatabase.Callback readRoomDatabaseCallback = new RoomDatabase.Callback() {
+
+        public void onCreate(SupportSQLiteDatabase db) {
+            super.onCreate(db);
+
+            databaseWriteExecutor.execute(() -> {
+                ReadTimeDAO readTimeDAO = INSTANCE.readTimeDAO();
+                readTimeDAO.deleteAll();
+
+                // try to insert some values into database
+                ReadTime readTime = new ReadTime("2022-05-01", 10);
+                readTimeDAO.insert(readTime);
+
+                readTime = new ReadTime("2022-05-02", 30);
+                readTimeDAO.insert(readTime);
+
+                readTime = new ReadTime("2022-05-03", 44);
+                readTimeDAO.insert(readTime);
+
+                readTime = new ReadTime("2022-05-04", 55);
+                readTimeDAO.insert(readTime);
+
+            });
+        }
+
+        ;
+    };
 }
