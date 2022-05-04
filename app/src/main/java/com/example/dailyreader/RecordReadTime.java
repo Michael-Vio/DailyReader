@@ -7,7 +7,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.dailyreader.DAO.ReadTimeDAO;
+import com.example.dailyreader.DAO.ReadTimeFirebaseDAO;
 import com.example.dailyreader.entity.ReadTime;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,7 +46,7 @@ public class RecordReadTime {
 
         long difference = endTime.getTime() - startTime.getTime();
         int minutes = (int) (difference % (1000 * 60 * 60)) / (1000 * 60);
-        ReadTimeDAO readTimeDAO = new ReadTimeDAO(startDate);
+        ReadTimeFirebaseDAO readTimeDAO = new ReadTimeFirebaseDAO(startDate);
 //        readTimeDAO.upload(startDate, minutes);
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();

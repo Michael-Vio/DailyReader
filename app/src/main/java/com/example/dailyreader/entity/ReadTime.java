@@ -6,10 +6,15 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-
+@Entity
 public class ReadTime {
 
+    @PrimaryKey
+    @ColumnInfo(name = "read_date")
+    @NonNull
     public String readDate;
+    @ColumnInfo(name = "read_time")
+    @NonNull
     public int readTime;
 
     public ReadTime( String readDate,  int readTime) {
