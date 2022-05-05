@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dailyreader.DAO.ReadTimeDAO;
 import com.example.dailyreader.DAO.ReadTimeFirebaseDAO;
+import com.example.dailyreader.entity.Book;
 import com.example.dailyreader.entity.ReadTime;
 import com.example.dailyreader.viewmodel.ReadTimeViewModel;
 import com.google.firebase.database.DataSnapshot;
@@ -56,15 +57,28 @@ public class RecordReadTime {
 
         long difference = endTime.getTime() - startTime.getTime();
         int minutes = (int) (difference % (1000 * 60 * 60)) / (1000 * 60);
-        ReadTimeFirebaseDAO readTimeFirebaseDAO = new ReadTimeFirebaseDAO(startDate);
+
+
+        ReadTime readTime = null;
+        CompletableFuture<ReadTime> readTimeCompletableFuture =  readTimeViewModel.findByDateFuture(startDate);
+        try {
+            readTime = readTimeCompletableFuture.get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        if (readTime != null) {
+            int newMinutes = readTime.getReadTime() + minutes;
+            readTime.setReadTime(newMinutes);
+            readTimeViewModel.update(readTime);
+        } else {
+            readTime = new ReadTime(startDate, minutes);
+            readTimeViewModel.insert(readTime);
+        }
+//        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference ref = database.getReference("users").child("records");
+//        ReadTimeFirebaseDAO readTimeFirebaseDAO = new ReadTimeFirebaseDAO(startDate);
 //        readTimeDAO.upload(startDate, minutes);
-        ReadTime readTime = new ReadTime(startDate, minutes);
-        readTimeViewModel.insert(readTime);
-
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("users").child("records");
-
-
+// 使用work manager
 //        ref.child(startDate).addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

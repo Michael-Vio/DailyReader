@@ -96,7 +96,13 @@ public class ReadActivity extends AppCompatActivity{
 
         loadBook(book.getFilepath());
         finishReadPosition = book.getReadPosition();
-        loadPage(finishReadPosition, -2);
+        if (finishReadPosition > 8000) {
+            int itr = finishReadPosition / 8000;
+            int skip = finishReadPosition % 8000;
+            locateLastPosition(itr, skip);
+        } else {
+            loadPage(finishReadPosition, -2);
+        }
     }
 
     @Override
@@ -109,8 +115,9 @@ public class ReadActivity extends AppCompatActivity{
     @Override
     protected void onStop() {
         super.onStop();
+        book.setReadPosition(finishReadPosition);
+        bookViewModel.update(book);
         recordReadTime.stopRecord();
-
     }
 
 
@@ -141,7 +148,21 @@ public class ReadActivity extends AppCompatActivity{
             }
 //        }
         readPageView.setText(buffer);
+    }
 
+    private void locateLastPosition(int itr, int skip) {
+        if (itr >= 1) {
+            for (int i = 0; i < itr; i++) {
+                try {
+                    buffer.clear();
+                    int readCharNumber = reader.read(buffer);
+                    Toast.makeText(getApplicationContext(), ""+readCharNumber, Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        loadPage(skip, -2);
     }
 
     private void updateBuffer()
@@ -171,8 +192,6 @@ public class ReadActivity extends AppCompatActivity{
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                book.setReadPosition(finishReadPosition);
-                bookViewModel.update(book);
                 Intent intent = new Intent(ReadActivity.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -265,11 +284,13 @@ public class ReadActivity extends AppCompatActivity{
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             if (e1.getX() - e2.getX() > 50) {
-                if (finishReadPosition == new File(book.getFilepath()).length()) {
+
+//                Toast.makeText(getApplicationContext(), ""+finishReadPosition, Toast.LENGTH_SHORT).show();
+                if (finishReadPosition >= new File(book.getFilepath()).length()) {
                     Toast.makeText(getApplicationContext(),"The last page" ,Toast.LENGTH_SHORT).show();
                 } else {
                     endPosition += readPageView.getCharNum();
-                    finishReadPosition += endPosition;
+                    finishReadPosition += readPageView.getCharNum();
                     if (endPosition >= 8000) {
                         updateBuffer();
                         endPosition = 0;
@@ -277,6 +298,7 @@ public class ReadActivity extends AppCompatActivity{
                     loadPage(endPosition, -2);
                     readPageView.resize();
                 }
+
             }
 //            if (e2.getX() - e1.getX() > 50) {
 //                if (positionIndex > 0) {
