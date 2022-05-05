@@ -15,7 +15,6 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:marqueeRepeatLimit="marquee_forever"
-
         android:text="Today's weather"
         />
 

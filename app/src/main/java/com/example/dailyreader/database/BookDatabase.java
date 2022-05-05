@@ -12,7 +12,7 @@ import com.example.dailyreader.entity.Book;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Book.class}, version = 1, exportSchema = false)
+@Database(entities = {Book.class}, version = 2, exportSchema = false)
 public abstract class BookDatabase extends RoomDatabase {
     public abstract BookDAO bookDAO();
 

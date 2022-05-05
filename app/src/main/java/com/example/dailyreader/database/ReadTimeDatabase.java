@@ -2,6 +2,7 @@ package com.example.dailyreader.database;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -13,7 +14,7 @@ import com.example.dailyreader.entity.ReadTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {ReadTime.class}, version = 1, exportSchema = false)
+@Database(entities = {ReadTime.class}, version = 2, exportSchema = false)
 public abstract class ReadTimeDatabase extends RoomDatabase {
     public abstract ReadTimeDAO readTimeDAO();
     private static ReadTimeDatabase INSTANCE;
@@ -25,6 +26,9 @@ public abstract class ReadTimeDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), ReadTimeDatabase.class, "ReadTimeDatabase")
                     .fallbackToDestructiveMigration()
+
+                    //add call back to our database.
+                    .addCallback(readRoomDatabaseCallback)
                     .build();
         }
         return INSTANCE;
@@ -34,8 +38,9 @@ public abstract class ReadTimeDatabase extends RoomDatabase {
     //Examples for reading time to test the report screen
     private static RoomDatabase.Callback readRoomDatabaseCallback = new RoomDatabase.Callback() {
 
-        public void onCreate(SupportSQLiteDatabase db) {
-            super.onCreate(db);
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase database){
+            super.onCreate(database);
 
             databaseWriteExecutor.execute(() -> {
                 ReadTimeDAO readTimeDAO = INSTANCE.readTimeDAO();
@@ -57,6 +62,6 @@ public abstract class ReadTimeDatabase extends RoomDatabase {
             });
         }
 
-        ;
-    };
+        };
+
 }
