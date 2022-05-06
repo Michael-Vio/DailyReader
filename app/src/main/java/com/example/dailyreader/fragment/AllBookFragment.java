@@ -16,16 +16,23 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Constraints;
+import androidx.work.NetworkType;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.dailyreader.R;
+import com.example.dailyreader.UploadWorker;
 import com.example.dailyreader.WeatherApi;
 import com.example.dailyreader.adapter.AllBookFragmentAdapter;
 import com.example.dailyreader.databinding.AllBookFragmentBinding;
 import com.example.dailyreader.entity.Book;
 import com.example.dailyreader.viewmodel.BookViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -111,6 +118,17 @@ public class AllBookFragment extends Fragment {
             }
 
 
+        });
+
+        WorkManager workManager = WorkManager.getInstance(getContext());
+//        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
+        PeriodicWorkRequest uploadWorkRequest = new PeriodicWorkRequest.Builder(UploadWorker.class, 24, TimeUnit.HOURS).build();
+
+        binding.startWorkmanager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                workManager.enqueue(uploadWorkRequest);
+            }
         });
 
         return view;

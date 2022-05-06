@@ -42,6 +42,7 @@ public class AddBooksFragment extends Fragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         addBooksBinding = AddBooksFragmentBinding.inflate(inflater, container, false);
         View view = addBooksBinding.getRoot();
         bookViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication()).create(BookViewModel.class);

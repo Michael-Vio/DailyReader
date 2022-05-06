@@ -18,11 +18,9 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.example.dailyreader.entity.Book;
 import com.example.dailyreader.viewmodel.BookViewModel;
 import com.example.dailyreader.viewmodel.ReadTimeViewModel;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,6 +31,7 @@ import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 
 public class ReadActivity extends AppCompatActivity{
@@ -42,11 +41,12 @@ public class ReadActivity extends AppCompatActivity{
     private Book book;
     private BufferedReader reader;
     private final CharBuffer buffer = CharBuffer.allocate(8000);
-    private int endPosition = 0;
+    private int endPosition;
     private PopupWindow popupWindow;
     private GestureDetector gestureDetector;
     private int finishReadPosition;
     private RecordReadTime recordReadTime;
+
 
 
 
@@ -58,15 +58,7 @@ public class ReadActivity extends AppCompatActivity{
 
         bookViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(BookViewModel.class);
         readTimeViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(ReadTimeViewModel.class);
-//        View v = this.getWindow().getDecorView();
-//
-//        v.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                return gestureDetector.onTouchEvent(event);
-//            }
-//        });
-//
+
         View.OnTouchListener touchListener = new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -101,7 +93,8 @@ public class ReadActivity extends AppCompatActivity{
             int skip = finishReadPosition % 8000;
             locateLastPosition(itr, skip);
         } else {
-            loadPage(finishReadPosition, -2);
+            endPosition = finishReadPosition;
+            loadPage(endPosition, -2);
         }
     }
 
@@ -115,71 +108,14 @@ public class ReadActivity extends AppCompatActivity{
     @Override
     protected void onStop() {
         super.onStop();
-        book.setReadPosition(finishReadPosition);
-        bookViewModel.update(book);
-        recordReadTime.stopRecord();
-    }
-
-
-    private void loadBook(String book) {
-
         try {
-            InputStream in = new FileInputStream(book);
-            reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            reader.read(buffer);
-        } catch (IOException e) {
-            Toast.makeText(this, "The book does not exist.", Toast.LENGTH_SHORT).show();
-        }
-
-        readPageView.setText(buffer);
-    }
-
-    private void loadPage(int position, int limit) {
-//        if (position != 0) {
-//            try {
-//                reader.skip(position);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        } else {
-            buffer.position(position);
-            if (limit != -2) {
-                buffer.limit(limit);
-            }
-//        }
-        readPageView.setText(buffer);
-    }
-
-    private void locateLastPosition(int itr, int skip) {
-        if (itr >= 1) {
-            for (int i = 0; i < itr; i++) {
-                try {
-                    buffer.clear();
-                    int readCharNumber = reader.read(buffer);
-                    Toast.makeText(getApplicationContext(), ""+readCharNumber, Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        loadPage(skip, -2);
-    }
-
-    private void updateBuffer()
-    {
-        try {
-            buffer.clear();
-            int readCharNumber = 0;
-            if ((readCharNumber = reader.read(buffer)) != 8000) {
-                loadPage(0, readCharNumber);
-            } else {
-                loadPage(0, -2);
-            }
-
+            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        book.setReadPosition(finishReadPosition);
+        bookViewModel.update(book);
+        recordReadTime.stopRecord();
     }
 
     private void showPopupWindow() {
@@ -230,7 +166,7 @@ public class ReadActivity extends AppCompatActivity{
         textSizeS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
+                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
             }
         });
 
@@ -238,7 +174,7 @@ public class ReadActivity extends AppCompatActivity{
         textSizeM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
             }
         });
 
@@ -246,11 +182,65 @@ public class ReadActivity extends AppCompatActivity{
         textSizeL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 25);
+                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
             }
         });
 
         popupWindow.showAsDropDown(findViewById(R.id.read_activity_layout));
+    }
+
+    private void loadBook(String book) {
+
+        try {
+            InputStream in = new FileInputStream(book);
+            reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+            reader.read(buffer);
+        } catch (IOException e) {
+            Toast.makeText(this, "The book does not exist.", Toast.LENGTH_SHORT).show();
+        }
+
+        readPageView.setText(buffer);
+    }
+
+    private void loadPage(int position, int limit) {
+        buffer.position(position);
+        if (limit != -2) {
+            buffer.limit(limit);
+        }
+        readPageView.setText(buffer);
+
+    }
+
+    private void locateLastPosition(int itr, int skip) {
+
+        if (itr > 0) {
+            for (int i = 0; i < itr; i++) {
+                try {
+                    buffer.clear();
+                    reader.read(buffer);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        endPosition = skip;
+        loadPage(endPosition + 1, -2);
+    }
+
+    private void updateBuffer()
+    {
+        try {
+            buffer.clear();
+            int readCharNumber = 0;
+            if ((readCharNumber = reader.read(buffer)) != 8000) {
+                loadPage(0, readCharNumber);
+            } else {
+                loadPage(0, -2);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -283,34 +273,29 @@ public class ReadActivity extends AppCompatActivity{
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            finishReadPosition += readPageView.getCharNum();
             if (e1.getX() - e2.getX() > 50) {
-
-//                Toast.makeText(getApplicationContext(), ""+finishReadPosition, Toast.LENGTH_SHORT).show();
                 if (finishReadPosition >= new File(book.getFilepath()).length()) {
+                    loadPage(endPosition, -2);
                     Toast.makeText(getApplicationContext(),"The last page" ,Toast.LENGTH_SHORT).show();
+                    return false;
                 } else {
                     endPosition += readPageView.getCharNum();
-                    finishReadPosition += readPageView.getCharNum();
                     if (endPosition >= 8000) {
                         updateBuffer();
                         endPosition = 0;
                     }
                     loadPage(endPosition, -2);
-                    readPageView.resize();
+//                    readPageView.resize();
+                    Toast.makeText(getApplicationContext(),endPosition + " " + finishReadPosition ,Toast.LENGTH_SHORT).show();
+                }
+
+            } else if (e2.getX() - e1.getX() > 50) {
+                if (finishReadPosition == 0) {
+                    Toast.makeText(getApplicationContext(), "This is the first page", Toast.LENGTH_SHORT).show();
                 }
 
             }
-//            if (e2.getX() - e1.getX() > 50) {
-//                if (positionIndex > 0) {
-//                    loadPage(startPosition.get(positionIndex-1), -2);
-//                    readPageView.resize();
-//                    positionIndex--;
-//                } else if (positionIndex == 0){
-//                    loadPage(0, -2);
-//                    readPageView.resize();
-//                    Toast.makeText(getApplicationContext(),"first page" ,Toast.LENGTH_SHORT).show();
-//                }
-//            }
 
             return true;
         }

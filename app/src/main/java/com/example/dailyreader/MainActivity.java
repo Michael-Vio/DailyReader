@@ -1,21 +1,23 @@
 package com.example.dailyreader;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.dailyreader.databinding.ActivityMainBinding;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 
 public class MainActivity extends AppCompatActivity {
+
     private ActivityMainBinding binding;
-    private AppBarConfiguration mAppBarConfiguration;
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,26 +25,30 @@ public class MainActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        setSupportActionBar(binding.appBar.toolbar);
+        mAuth = FirebaseAuth.getInstance();
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_all_book_fragment,
-                R.id.nav_add_book_fragment,
-                R.id.nav_logout_fragment,
-                R.id.nav_map_fragment,
-                R.id.nav_report_fragment,
-                R.id.nav_weather_fragment,
-                R.id.nav_sync_fragment)
-                .setOpenableLayout(binding.drawerLayout)
-                .build();
-        FragmentManager fragmentManager= getSupportFragmentManager();
-        NavHostFragment navHostFragment = (NavHostFragment)
-                fragmentManager.findFragmentById(R.id.nav_host_fragment);
-        NavController navController = navHostFragment.getNavController();
+        binding.signUp.setOnClickListener(v -> {
+            startActivity(new Intent(this, RegisterActivity.class));
+        });
 
-        NavigationUI.setupWithNavController(binding.navView, navController);
+        // validation
 
-        NavigationUI.setupWithNavController(binding.appBar.toolbar,navController,
-                mAppBarConfiguration);
+        binding.loginButton.setOnClickListener(v ->{
+            mAuth.signInWithEmailAndPassword(binding.emailInput.getText().toString(), binding.passwordInput.getText().toString())
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            Toast.makeText(this, "Login successfully!",
+                                    Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(this, HomeActivity.class));
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(this, "Login failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        });
     }
 }
+

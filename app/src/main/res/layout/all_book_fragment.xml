@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,5 +22,18 @@
         android:id="@+id/all_book_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="621dp"
+        android:layout_below="@+id/weatherHello"
+        android:layout_marginTop="0dp"
         android:scrollbars="vertical" />
-</LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/start_workmanager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/all_book_recycler_view"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="1dp"
+        android:contentDescription="start work manager"/>
+</RelativeLayout>

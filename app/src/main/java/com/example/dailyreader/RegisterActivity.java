@@ -46,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
         binding.genderInput.setSelection(listsize);
 
         binding.backButton.setOnClickListener(v ->{
-            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
         });
         
         binding.submitButton.setOnClickListener(v ->{

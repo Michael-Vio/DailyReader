@@ -15,21 +15,18 @@ import com.mapbox.maps.Style;
 
 
 public class MapFragment extends Fragment {
-
     private MapFragmentBinding mapBinding;
-
-    public MapFragment(){}
 
     private MapView mapView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        final Point point = Point.fromLngLat(145.045837, -37.876823 );
         mapBinding = MapFragmentBinding.inflate(inflater, container, false);
         View view = mapBinding.getRoot();
 
-        final Point point = Point.fromLngLat(145.045837, -37.876823 );
-        
         CameraOptions cameraPosition = new CameraOptions.Builder()
                 .zoom(13.0)
                 .center(point)
@@ -40,7 +37,6 @@ public class MapFragment extends Fragment {
 
         return view;
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
