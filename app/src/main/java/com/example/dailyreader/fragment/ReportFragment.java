@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -63,11 +64,27 @@ public class ReportFragment extends Fragment {
         reportBinding = ReportFragmentBinding.inflate(inflater, container, false);
         View view = reportBinding.getRoot();
 
+        Button addButton = view.findViewById(R.id.addButton);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new AddFragment());
+            }
+        });
+
+        Button viewButton = view.findViewById(R.id.viewButton);
+        viewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new ViewFragment());
+            }
+        });
+
         //Report screen
         /*readTimeViewModel = new ViewModelProvider(this).get(ReadTimeViewModel.class);
         LiveData<List<ReadTime>> readTimeList = readTimeViewModel.getAllReadTimes();*/
 
-        generatePieChart(view);
+        //generatePieChart(view);
         //generateColChart(view);
 
 
@@ -129,11 +146,19 @@ public class ReportFragment extends Fragment {
         cartesian.title("Second chart");*/
 
 
+
+
         return view;
     }
 
+    private void replaceFragment(Fragment nextFragment) {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container_view, nextFragment);
+        fragmentTransaction.commit();
+    }
 
-    public void generatePieChart(View view){
+    /*public void generatePieChart(View view){
 
         //AnyChart implement
         //setContentView(R.layout.activity_chart_common);
@@ -142,12 +167,12 @@ public class ReportFragment extends Fragment {
 
         Pie mPie = AnyChart.pie();
 
-        /*pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
+        pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
             @Override
             public void onClick(Event event) {
                 Toast.makeText(ReportFragment.this, event.getData().get("x") + ":" + event.getData().get("value"), Toast.LENGTH_SHORT).show;
             }
-        });*/
+        });
 
         //get the data from the list
 
@@ -210,6 +235,17 @@ public class ReportFragment extends Fragment {
 
     }
 
+    public void changeChart(View view) {
+        cartesianSet = !cartesianSet;
+        if (cartesianSet) {
+            generateColChart(view);
+            chartView.setChart(cartesian);
+        } else {
+            generatePieChart(view);
+            chartView.setChart(pie);
+        }
+    }*/
+
     public List<DataEntry> createData()
     {
         List<DataEntry> data1 = new ArrayList<>();
@@ -224,16 +260,7 @@ public class ReportFragment extends Fragment {
 
     }
 
-    public void changeChart(View view) {
-        cartesianSet = !cartesianSet;
-        if (cartesianSet) {
-            generateColChart(view);
-            chartView.setChart(cartesian);
-        } else {
-            generatePieChart(view);
-            chartView.setChart(pie);
-        }
-    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
