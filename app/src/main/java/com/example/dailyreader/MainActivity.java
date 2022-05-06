@@ -34,19 +34,22 @@ public class MainActivity extends AppCompatActivity {
 
         binding.loginButton.setOnClickListener(v -> {
             if (loginCheck()) {
+                binding.progressBar.setVisibility(View.VISIBLE);
                 mAuth.signInWithEmailAndPassword(binding.emailInput.getText().toString(), binding.passwordInput.getText().toString())
                         .addOnCompleteListener(this, task -> {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
+                                binding.progressBar.setVisibility(View.INVISIBLE);
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 Toast.makeText(this, "Login successfully!",
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
                                 startActivity(new Intent(this, HomeActivity.class));
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Toast.makeText(this, "                       Login failed." +
                                                 "\nPlease check your Email and password!",
-                                        Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_LONG).show();
+                                binding.progressBar.setVisibility(View.INVISIBLE);
                             }
                         });
             }
