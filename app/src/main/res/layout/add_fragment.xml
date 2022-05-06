@@ -6,7 +6,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
+    <DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </DatePicker>
+
+    <!--&lt;!&ndash;simple text view to show the selected date by the user&ndash;&gt;
+    <TextView
+        android:id="@+id/show_selected_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="1dp"
+        android:text="Selected Date is : "
+        android:textSize="18sp" />
+
+    &lt;!&ndash;button to open the material design date picker dialog&ndash;&gt;
+    <Button
+        android:id="@+id/pick_date_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="1dp"
+        android:text="Select Date"
+        android:textSize="18sp" />-->
+
+    <!--<EditText
         android:id="@+id/editText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,7 +55,9 @@
         android:layout_marginLeft="100dp"
         android:layout_marginTop="10dp"
         android:textStyle="bold"
-        android:textSize="18dp"/>
+        android:textSize="18dp"/>-->
+
+
 
     <com.anychart.AnyChartView
         android:id="@+id/any_chart_view"
