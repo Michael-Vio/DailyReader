@@ -22,6 +22,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.NavigationJava.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,7 +38,9 @@
             android:theme="@style/Theme.NavigationJava.NoActionBar" />
         <activity
             android:name=".RegisterActivity"
-            android:theme="@style/Theme.NavigationJava.NoActionBar" />
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.NavigationJava.NoActionBar"/>
+
     </application>
 
 </manifest>
