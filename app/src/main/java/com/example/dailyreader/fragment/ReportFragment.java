@@ -54,6 +54,9 @@ public class ReportFragment extends Fragment {
     private AnyChartView chartView;
     private boolean cartesianSet;
 
+    // date picker submit button
+    Button submit;
+
 
 
     public ReportFragment () {}
@@ -64,6 +67,7 @@ public class ReportFragment extends Fragment {
         reportBinding = ReportFragmentBinding.inflate(inflater, container, false);
         View view = reportBinding.getRoot();
 
+        //pie chart
         Button addButton = view.findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,11 +76,21 @@ public class ReportFragment extends Fragment {
             }
         });
 
+        //col chart
         Button viewButton = view.findViewById(R.id.viewButton);
         viewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 replaceFragment(new ViewFragment());
+            }
+        });
+
+        //date picker
+        Button setStartDate = view.findViewById(R.id.setStartDate);
+        setStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new DatePickerFragment());
             }
         });
 

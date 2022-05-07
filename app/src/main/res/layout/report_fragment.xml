@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Pie Chart"
-        android:textSize="15sp" />
+        android:textSize="10sp" />
 
     <Button
         android:id="@+id/viewButton"
@@ -17,7 +17,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="Column Chart"
-        android:textSize="15sp" />
+        android:textSize="10sp" />
+
+    <Button
+        android:id="@+id/setStartDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Set Start date"
+        android:textSize="10sp" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container_view"

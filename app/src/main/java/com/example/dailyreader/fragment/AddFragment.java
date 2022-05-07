@@ -96,7 +96,6 @@ public class AddFragment extends Fragment {
         addBinding = AddFragmentBinding.inflate(inflater, container, false);
         View view = addBinding.getRoot();
 
-        //generateDateRangerPicker(view);
         generatePieChart(view);
 
         return view;
@@ -303,7 +302,7 @@ public class AddFragment extends Fragment {
         data1.add(new ValueDataEntry("2022-05-04", 6));
         data1.add(new ValueDataEntry("2022-05-05", 66));
         data1.add(new ValueDataEntry("2022-05-06", 76));
-        data1.add(new ValueDataEntry(dateStart, 8));
+        //data1.add(new ValueDataEntry(dateStart, 8));
 
 
         return data1;

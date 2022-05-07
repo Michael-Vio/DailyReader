@@ -6,13 +6,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <DatePicker
-        android:id="@+id/datePicker"
+    <!--<TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-    </DatePicker>
+        android:layout_height="wrap_content"
+        android:layout_above="@id/button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="28dp"
+        android:text="date"
+        android:textSize="30sp" />
 
-    <!--&lt;!&ndash;simple text view to show the selected date by the user&ndash;&gt;
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="open date picker" />-->
+
+   <!-- &lt;!&ndash;simple text view to show the selected date by the user generateDateRangerPicker&ndash;&gt;
     <TextView
         android:id="@+id/show_selected_date"
         android:layout_width="wrap_content"
@@ -22,7 +34,7 @@
         android:text="Selected Date is : "
         android:textSize="18sp" />
 
-    &lt;!&ndash;button to open the material design date picker dialog&ndash;&gt;
+    &lt;!&ndash;button to open the material design date picker dialog generateDateRangerPicker&ndash;&gt;
     <Button
         android:id="@+id/pick_date_button"
         android:layout_width="wrap_content"
