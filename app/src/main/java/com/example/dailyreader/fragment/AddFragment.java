@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -88,6 +89,8 @@ public class AddFragment extends Fragment {
     int month; //当前月份
     int day; //今天
 
+    String startDob = null;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,10 +99,29 @@ public class AddFragment extends Fragment {
         addBinding = AddFragmentBinding.inflate(inflater, container, false);
         View view = addBinding.getRoot();
 
-        generatePieChart(view);
+        if(startDob == null){
+            Toast.makeText(getContext(), "Please set the start date first!", Toast.LENGTH_LONG).show();
+        }
+        receiveStringDobAndGeneratePieChart(view);
 
         return view;
     }
+
+    public void receiveStringDobAndGeneratePieChart(View view){
+
+        //get the dob from another fragment
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
+                // We use a String here, but any type that can be put in a Bundle is supported
+                startDob = bundle.getString("bundleKey");
+                // Do something with the result...
+                generatePieChart(view,startDob);
+            }
+        });
+    }
+
+
 
     public void generateDateRangerPicker(View view){
 
@@ -256,7 +278,7 @@ public class AddFragment extends Fragment {
 
     }
 
-    public void generatePieChart(View view){
+    public void generatePieChart(View view,String dob){
 
         //AnyChart implement
         //setContentView(R.layout.activity_chart_common);
@@ -270,7 +292,7 @@ public class AddFragment extends Fragment {
 
         //get the data from the list
 
-        mPie.data(createData());
+        mPie.data(createDataWithDob(dob));
 
         mPie.title("Your daily reading time");
 
@@ -293,16 +315,58 @@ public class AddFragment extends Fragment {
 
     }
 
+    public List<DataEntry> createDataWithDob(String dob)
+    {
+        String[] number = dob.split("[-]");
+
+        String year = number[0];
+        String month = number[1];
+        String day = number[2];
+
+        int numberDay = Integer.valueOf(day);
+
+        String day1 = String.valueOf(numberDay+1);
+        String day2 = String.valueOf(numberDay+2);
+        String day3 = String.valueOf(numberDay+3);
+        String day4 = String.valueOf(numberDay+4);
+
+        String date1 = year + "-" + month + "-" + day1;
+        String date2 = year + "-" + month + "-" + day2;
+        String date3 = year + "-" + month + "-" + day3;
+        String date4 = year + "-" + month + "-" + day4;
+
+
+        List<DataEntry> data1 = new ArrayList<>();
+
+        data1.add(new ValueDataEntry(startDob, 10));
+        data1.add(new ValueDataEntry(date1, 22));
+        data1.add(new ValueDataEntry(date2, 32));
+        data1.add(new ValueDataEntry(date3, 44));
+        data1.add(new ValueDataEntry(date4, 43));
+
+        /*data1.add(new ValueDataEntry("2022-05-01", 35));
+        data1.add(new ValueDataEntry("2022-05-02", 23));
+        data1.add(new ValueDataEntry("2022-05-03", 11));
+        data1.add(new ValueDataEntry("2022-05-04", 6));
+        data1.add(new ValueDataEntry("2022-05-05", 66));
+        data1.add(new ValueDataEntry("2022-05-06", 76));
+*/
+        return data1;
+
+    }
+
     public List<DataEntry> createData()
     {
         List<DataEntry> data1 = new ArrayList<>();
+
+        data1.add(new ValueDataEntry(startDob, 111));
         data1.add(new ValueDataEntry("2022-05-01", 35));
         data1.add(new ValueDataEntry("2022-05-02", 23));
         data1.add(new ValueDataEntry("2022-05-03", 11));
         data1.add(new ValueDataEntry("2022-05-04", 6));
         data1.add(new ValueDataEntry("2022-05-05", 66));
         data1.add(new ValueDataEntry("2022-05-06", 76));
-        //data1.add(new ValueDataEntry(dateStart, 8));
+
 
 
         return data1;
