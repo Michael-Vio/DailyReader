@@ -1,22 +1,28 @@
 package com.example.dailyreader;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.work.Constraints;
-import androidx.work.NetworkType;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
+
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dailyreader.databinding.ActivityHomeBinding;
-import com.example.dailyreader.databinding.ActivityMainBinding;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.mapbox.maps.Snapshot;
 
 import java.util.concurrent.TimeUnit;
 
@@ -24,6 +30,9 @@ import java.util.concurrent.TimeUnit;
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private AppBarConfiguration mAppBarConfiguration;
+    private FirebaseAuth mAuth;
+    private DatabaseReference reference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +58,29 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = navHostFragment.getNavController();
 
         NavigationUI.setupWithNavController(binding.navView, navController);
+        // Set header with username and email
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        String userId = user.getUid();
+        reference = FirebaseDatabase.getInstance().getReference("User").child(userId);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String username = snapshot.child("username").getValue().toString();
+                String email = snapshot.child("user_email").getValue().toString();
+                TextView test = binding.navView.getHeaderView(0).findViewById(R.id.username_email);
+                test.setText(username+"\n"+email);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(HomeActivity.this, "Username and Email Address loading failed.",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
 
         NavigationUI.setupWithNavController(binding.appBar.toolbar,navController,
                 mAppBarConfiguration);
 
     }
 }
-
