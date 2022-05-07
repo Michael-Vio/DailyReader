@@ -14,20 +14,27 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.dailyreader.databinding.RegisterActivityBinding;
+import com.example.dailyreader.entity.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class RegisterActivity extends AppCompatActivity {
 
     private RegisterActivityBinding binding;
     private FirebaseAuth mAuth;
+    private DatabaseReference reference;
+    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,11 +167,17 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (validEmail && validAddress && validPassword && validUsername && validGender){
             binding.progressBar.setVisibility(View.VISIBLE);
+            User user_info = new User(emailInput.toString(), usernameInput.toString(), genderInput, addressInput.toString());
+            Map<String, User> userMap = new HashMap<>();
+            userMap.put(emailInput.toString(), user_info);
             mAuth.createUserWithEmailAndPassword(emailInput.toString(), passwordInput.toString())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                // Sign in success, update users' information to firebase
+                                reference = database.getInstance().getReference("User");
+                                reference.setValue(userMap);
                                 // Sign in success, update UI with the signed-in user's information
                                 binding.progressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(RegisterActivity.this, "Congratulations! Register successfully!", Toast.LENGTH_LONG).show();
