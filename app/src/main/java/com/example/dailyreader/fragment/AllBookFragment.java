@@ -1,7 +1,9 @@
 package com.example.dailyreader.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,27 +13,38 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.work.Constraints;
-import androidx.work.NetworkType;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 
+import com.example.dailyreader.DAO.ReadTimeFirebaseDAO;
 import com.example.dailyreader.R;
 import com.example.dailyreader.UploadWorker;
 import com.example.dailyreader.WeatherApi;
 import com.example.dailyreader.adapter.AllBookFragmentAdapter;
 import com.example.dailyreader.databinding.AllBookFragmentBinding;
 import com.example.dailyreader.entity.Book;
+import com.example.dailyreader.entity.ReadTime;
 import com.example.dailyreader.viewmodel.BookViewModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.dailyreader.viewmodel.ReadTimeViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -57,7 +70,7 @@ public class AllBookFragment extends Fragment {
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.allBookRecyclerView.setLayoutManager(layoutManager);
-        bookViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()).create(BookViewModel.class);
+        bookViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication()).create(BookViewModel.class);
         adapter = new AllBookFragmentAdapter(bookViewModel, new ArrayList<>());
         binding.allBookRecyclerView.setAdapter(adapter);
 
@@ -120,7 +133,7 @@ public class AllBookFragment extends Fragment {
 
         });
 
-        WorkManager workManager = WorkManager.getInstance(getContext());
+        WorkManager workManager = WorkManager.getInstance(requireContext());
 //        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
         PeriodicWorkRequest uploadWorkRequest = new PeriodicWorkRequest.Builder(UploadWorker.class, 24, TimeUnit.HOURS).build();
 
@@ -135,13 +148,10 @@ public class AllBookFragment extends Fragment {
     }
 
 
-
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
 
 }

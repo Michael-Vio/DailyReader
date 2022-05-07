@@ -13,6 +13,7 @@ import androidx.work.WorkManager;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.dailyreader.databinding.ActivityHomeBinding;
 import com.example.dailyreader.databinding.ActivityMainBinding;

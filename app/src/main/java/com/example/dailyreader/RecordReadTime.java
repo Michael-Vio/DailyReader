@@ -38,14 +38,7 @@ public class RecordReadTime {
 
         long difference = endTime.getTime() - startTime.getTime();
         int minutes = (int) (difference % (1000 * 60 * 60)) / (1000 * 60);
-
-        ReadTime readTime = null;
-        CompletableFuture<ReadTime> readTimeCompletableFuture =  readTimeViewModel.findByDateFuture(startDate);
-        try {
-            readTime = readTimeCompletableFuture.get();
-        } catch (ExecutionException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        ReadTime readTime = findRecord(startDate);
         if (readTime != null) {
             int newMinutes = readTime.getReadTime() + minutes;
             readTime.setReadTime(newMinutes);
@@ -54,9 +47,16 @@ public class RecordReadTime {
             readTime = new ReadTime(startDate, minutes);
             readTimeViewModel.insert(readTime);
         }
-
     }
 
-
-
+    public ReadTime findRecord(String date) {
+        ReadTime readTime = null;
+        CompletableFuture<ReadTime> readTimeCompletableFuture =  readTimeViewModel.findByDateFuture(date);
+        try {
+            readTime = readTimeCompletableFuture.get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        return readTime;
+    }
 }

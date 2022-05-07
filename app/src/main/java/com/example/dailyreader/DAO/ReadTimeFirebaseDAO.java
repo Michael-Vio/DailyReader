@@ -18,10 +18,10 @@ import java.util.HashMap;
 public class ReadTimeFirebaseDAO {
     private DatabaseReference databaseReference;
 
-    public ReadTimeFirebaseDAO(String date)
+    public ReadTimeFirebaseDAO(String userId, String date)
     {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("users").child("records").child(date);
+        databaseReference = firebaseDatabase.getReference("User").child(userId).child("records").child(date);
     }
 
     public Task<Void> add(ReadTime readTime) {

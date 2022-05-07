@@ -2,21 +2,17 @@ package com.example.dailyreader.viewmodel;
 
 import android.app.Application;
 import android.os.Build;
-
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
-
-
 import com.example.dailyreader.entity.ReadTime;
 import com.example.dailyreader.repository.ReadTimeRepository;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+
 public class ReadTimeViewModel extends AndroidViewModel {
     private final ReadTimeRepository rRepository;
-    private final LiveData<List<ReadTime>> allReadTimes;
+    private final List<ReadTime> allReadTimes;
     public ReadTimeViewModel (Application application) {
         super(application);
         rRepository = new ReadTimeRepository(application);
@@ -29,7 +25,7 @@ public class ReadTimeViewModel extends AndroidViewModel {
     public CompletableFuture<ReadTime> findByDateFuture(final String readDate){
         return rRepository.findByDateFuture(readDate);
     }
-    public LiveData<List<ReadTime>> getAllReadTimes() {
+    public List<ReadTime> getAllReadTimes() {
 
         return allReadTimes;
     }

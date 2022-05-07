@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 public class ReadTimeRepository {
     private final ReadTimeDAO readTimeDao;
-    private final LiveData<List<ReadTime>> allReadTimes;
+    private final List<ReadTime> allReadTimes;
 
     public ReadTimeRepository(Application application){
         ReadTimeDatabase ReadTimeDb = ReadTimeDatabase.getInstance(application);
@@ -24,7 +24,7 @@ public class ReadTimeRepository {
         allReadTimes = readTimeDao.getAll();
     }
     // Room executes this query on a separate thread
-    public LiveData<List<ReadTime>> getAllReadTimes() {
+    public List<ReadTime> getAllReadTimes() {
 
         return allReadTimes;
     }

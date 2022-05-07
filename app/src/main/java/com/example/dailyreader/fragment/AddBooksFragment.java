@@ -10,9 +10,6 @@ import com.example.dailyreader.adapter.AddBooksFragmentAdapter;
 import com.example.dailyreader.databinding.AddBooksFragmentBinding;
 import com.example.dailyreader.entity.Book;
 import com.example.dailyreader.viewmodel.BookViewModel;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Environment;
@@ -34,8 +31,6 @@ public class AddBooksFragment extends Fragment{
     private File parentFolder;
     private File[] currentFiles;
     private final String[] permission = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
 
     public AddBooksFragment () {}
 

@@ -39,7 +39,8 @@ public class ReadActivity extends AppCompatActivity{
     private BookViewModel bookViewModel;
     private Book book;
     private BufferedReader reader;
-    private final CharBuffer buffer = CharBuffer.allocate(8000);
+    private final int bufferSize = 10000;
+    private final CharBuffer buffer = CharBuffer.allocate(bufferSize);
     private int endPosition;
     private PopupWindow popupWindow;
     private GestureDetector gestureDetector;
@@ -87,9 +88,9 @@ public class ReadActivity extends AppCompatActivity{
 
         loadBook(book.getFilepath());
         finishReadPosition = book.getReadPosition();
-        if (finishReadPosition >= 8000) {
-            int itr = finishReadPosition / 8000;
-            int skip = finishReadPosition % 8000;
+        if (finishReadPosition >= bufferSize) {
+            int itr = finishReadPosition / bufferSize;
+            int skip = finishReadPosition % bufferSize;
             locateLastPosition(itr, skip);
         } else {
             endPosition = finishReadPosition;
@@ -165,7 +166,7 @@ public class ReadActivity extends AppCompatActivity{
         textSizeS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
+                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
             }
         });
 
@@ -181,7 +182,7 @@ public class ReadActivity extends AppCompatActivity{
         textSizeL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
+                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
             }
         });
 
@@ -230,8 +231,8 @@ public class ReadActivity extends AppCompatActivity{
     {
         try {
             buffer.clear();
-            int readCharNumber = 0;
-            if ((readCharNumber = reader.read(buffer)) != 8000) {
+            int readCharNumber;
+            if ((readCharNumber = reader.read(buffer)) != bufferSize) {
                 loadPage(0, readCharNumber);
             } else {
                 loadPage(0, -2);
@@ -276,17 +277,14 @@ public class ReadActivity extends AppCompatActivity{
             if (e1.getX() - e2.getX() > 50) {
                 finishReadPosition += readPageView.getCharNum();
                 if (finishReadPosition >= new File(book.getFilepath()).length()) {
-                    loadPage(endPosition, -2);
                     Toast.makeText(getApplicationContext(),"The last page" ,Toast.LENGTH_SHORT).show();
                 } else {
                     endPosition += readPageView.getCharNum();
-                    if (endPosition >= 8000) {
+                    if (endPosition >= bufferSize) {
                         updateBuffer();
                         endPosition = 0;
                     }
                     loadPage(endPosition, -2);
-//                    readPageView.resize();
-                    Toast.makeText(getApplicationContext(),endPosition + " " + finishReadPosition ,Toast.LENGTH_SHORT).show();
                 }
 
             }

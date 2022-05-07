@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface ReadTimeDAO {
     @Query("SELECT * FROM readtime ORDER BY read_date ASC")
-    LiveData<List<ReadTime>> getAll();
+    List<ReadTime> getAll();
     @Query("SELECT * FROM readtime WHERE read_date = :readTimeDate LIMIT 1")
     ReadTime findByDate(String readTimeDate);
     @Insert

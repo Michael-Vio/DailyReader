@@ -1,4 +1,4 @@
-package com.example.dailyreader.viewmodel;
+package com.example.dailyreader;
 
 import androidx.appcompat.app.AppCompatActivity;
 

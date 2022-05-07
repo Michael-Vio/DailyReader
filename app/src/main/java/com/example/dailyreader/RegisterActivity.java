@@ -77,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void submitCheck() {
-        Boolean validEmail = false;
+        boolean validEmail = false;
         String emailInput = binding.emailInput.getText().toString();
         // Empty email input
         if(emailInput.isEmpty()){
@@ -95,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
             validEmail = true;
         }
 
-        Boolean validPassword = false;
+        boolean validPassword = false;
         String passwordInput = binding.passwordInput.getText().toString();
         String repeatPasswordInput = binding.repeatPasswordInput.getText().toString();
         // Empty password input
@@ -127,7 +127,7 @@ public class RegisterActivity extends AppCompatActivity {
             validPassword = true;
         }
 
-        Boolean validUsername = false;
+        boolean validUsername = false;
         String usernameInput = binding.usernameInput.getText().toString();
         // Empty username input
         if(usernameInput.isEmpty()){
@@ -143,7 +143,7 @@ public class RegisterActivity extends AppCompatActivity {
             validUsername = true;
         }
 
-        Boolean validAddress = false;
+        boolean validAddress = false;
         String addressInput = binding.addressInput.getText().toString();
         // Empty address input
         if (addressInput.isEmpty()){
@@ -155,7 +155,7 @@ public class RegisterActivity extends AppCompatActivity {
             validAddress = true;
         }
 
-        Boolean validGender = false;
+        boolean validGender = false;
         String genderInput = binding.genderInput.getSelectedItem().toString();
         // Check whether choose a gender
         if(genderInput.equals("Gender")){
@@ -180,7 +180,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 String userId = user.getUid();
                                 // Sign in success, update users' information to firebase
-                                reference = FirebaseDatabase.getInstance().getReference("User");
+                                reference = FirebaseDatabase.getInstance().getReference("Users");
                                 reference.child(userId).setValue(user_info);
                                 // Sign in success, update UI with the signed-in user's information
                                 binding.progressBar.setVisibility(View.INVISIBLE);

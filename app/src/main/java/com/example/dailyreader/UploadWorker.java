@@ -7,7 +7,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.example.dailyreader.viewmodel.ReadTimeViewModel;
+import com.example.dailyreader.DAO.ReadTimeDAO;
+import com.example.dailyreader.DAO.ReadTimeFirebaseDAO;
+import com.example.dailyreader.database.ReadTimeDatabase;
+import com.example.dailyreader.entity.ReadTime;
+import com.google.firebase.auth.FirebaseAuth;
+
+
+import java.util.List;
 
 
 public class UploadWorker extends Worker {
@@ -16,39 +23,28 @@ public class UploadWorker extends Worker {
     }
 
     public void synToFirebase() {
-//        ReadTimeViewModel readTimeViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication()).create(ReadTimeViewModel.class);
-//                final FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference ref = database.getReference("users").child("records");
-//        ReadTimeFirebaseDAO readTimeFirebaseDAO = new ReadTimeFirebaseDAO(startDate);
-//        readTimeDAO.upload(startDate, minutes);
-//
-//        ref.child(startDate).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                Integer totalReadMinute = dataSnapshot.child("readTime").getValue(int.class);
-//                if (totalReadMinute!=null) {
-//                    int min = totalReadMinute + minutes;
-//                    readTimeFirebaseDAO.upload(startDate, min);
-//                    Log.d("xxx", totalReadMinute + "");
-//                } else {
-////                    ReadTime readTime = new ReadTime(startDate, minutes);
-//                    readTimeFirebaseDAO.add(readTime);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                System.out.println("The read failed: " + databaseError.getCode());
-//            }
-//        });
-        Log.d("msg", "start");
+        Log.d("synToFirebase()", "start");
+        ReadTimeDatabase readTimeDatabase = ReadTimeDatabase.getInstance(getApplicationContext());
+        ReadTimeDAO readTimeDAO = readTimeDatabase.readTimeDAO();
+        Log.d("synToFirebase()", "retrieve data from room");
+        List<ReadTime> readTimeList = readTimeDAO.getAll();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String userId = firebaseAuth.getCurrentUser().getUid();
+        Log.d("synToFirebase()", "synchronize to firebase");
+        for (ReadTime readTime : readTimeList) {
+            ReadTimeFirebaseDAO firebaseDAO = new ReadTimeFirebaseDAO(userId, readTime.getReadDate());
+            firebaseDAO.upload(readTime.getReadDate(), readTime.getReadTime());
+        }
+
+        Log.d("synToFirebase()", "method end");
     }
 
     @Override
     public Result doWork() {
 
-        Log.d("UploadWorker:", "doWork() start");
+        Log.d("UploadWorker", "doWork() start");
         synToFirebase();
+        Log.d("UploadWorker", "doWork() end");
         return Result.success();
     }
 }
