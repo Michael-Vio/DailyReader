@@ -176,7 +176,7 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update users' information to firebase
-                                reference = database.getInstance().getReference("User");
+                                reference = FirebaseDatabase.getInstance().getReference("User");
                                 reference.setValue(userMap);
                                 // Sign in success, update UI with the signed-in user's information
                                 binding.progressBar.setVisibility(View.INVISIBLE);
