@@ -67,6 +67,10 @@ public class RegisterActivity extends AppCompatActivity {
         
         binding.submitButton.setOnClickListener(v ->{
             submitCheck();
+            User user_info = new User(binding.emailInput.getText().toString(), binding.usernameInput.getText().toString(),
+                    binding.genderInput.getSelectedItem().toString(), binding.addressInput.getText().toString());
+            Map<String, User> userMap = new HashMap<>();
+            userMap.put(binding.emailInput.getText().toString(), user_info);
         });
 
 
@@ -74,9 +78,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void submitCheck() {
         Boolean validEmail = false;
-        Editable emailInput = binding.emailInput.getText();
+        String emailInput = binding.emailInput.getText().toString();
         // Empty email input
-        if(emailInput.toString().isEmpty()){
+        if(emailInput.isEmpty()){
             binding.emailError.setError(getResources().getString(R.string.email_error));
             validEmail = false;
         }
@@ -92,20 +96,20 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         Boolean validPassword = false;
-        Editable passwordInput = binding.passwordInput.getText();
-        Editable repeatPasswordInput = binding.repeatPasswordInput.getText();
+        String passwordInput = binding.passwordInput.getText().toString();
+        String repeatPasswordInput = binding.repeatPasswordInput.getText().toString();
         // Empty password input
-        if(passwordInput.toString().isEmpty()){
+        if(passwordInput.isEmpty()){
             binding.passwordError.setError(getResources().getString(R.string.password_empty_error));
             validPassword = false;
         }
         // Password length error
-        else if(passwordInput.toString().length() < 8){
+        else if(passwordInput.length() < 8){
             binding.passwordError.setError(getResources().getString(R.string.password_length_error));
             validPassword = false;
         }
         // Whitespace error
-        else if(passwordInput.toString().contains(" ")){
+        else if(passwordInput.contains(" ")){
             binding.passwordError.setError(getResources().getString(R.string.password_space_error));
             validPassword = false;
         }
@@ -114,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
             validPassword = true;
         }
         // Check whether two passwords are the same
-        if(!repeatPasswordInput.toString().equals(passwordInput.toString())){
+        if(!repeatPasswordInput.equals(passwordInput)){
             binding.repeatPasswordError.setError(getResources().getString(R.string.repeat_password_error));
             validPassword = false;
         }
@@ -124,13 +128,13 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         Boolean validUsername = false;
-        Editable usernameInput = binding.usernameInput.getText();
+        String usernameInput = binding.usernameInput.getText().toString();
         // Empty username input
-        if(usernameInput.toString().isEmpty()){
+        if(usernameInput.isEmpty()){
             binding.usernameError.setError(getResources().getString(R.string.username_empty_error));
             validUsername = false;
         }
-        else if(usernameInput.toString().contains(" ")){
+        else if(usernameInput.contains(" ")){
             binding.usernameError.setError(getResources().getString(R.string.username_space_error));
             validUsername = false;
         }
@@ -140,9 +144,9 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         Boolean validAddress = false;
-        Editable addressInput = binding.addressInput.getText();
+        String addressInput = binding.addressInput.getText().toString();
         // Empty address input
-        if (addressInput.toString().isEmpty()){
+        if (addressInput.isEmpty()){
             binding.addressError.setError(getResources().getString(R.string.address_error));
             validAddress = false;
         }
@@ -167,21 +171,20 @@ public class RegisterActivity extends AppCompatActivity {
 
         if (validEmail && validAddress && validPassword && validUsername && validGender){
             binding.progressBar.setVisibility(View.VISIBLE);
-            User user_info = new User(emailInput.toString(), usernameInput.toString(), genderInput, addressInput.toString());
-            Map<String, User> userMap = new HashMap<>();
-            userMap.put(emailInput.toString(), user_info);
-            mAuth.createUserWithEmailAndPassword(emailInput.toString(), passwordInput.toString())
+            User user_info = new User(emailInput, usernameInput, genderInput, addressInput);
+            mAuth.createUserWithEmailAndPassword(emailInput, passwordInput)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                String userId = user.getUid();
                                 // Sign in success, update users' information to firebase
                                 reference = FirebaseDatabase.getInstance().getReference("User");
-                                reference.setValue(userMap);
+                                reference.child(userId).setValue(user_info);
                                 // Sign in success, update UI with the signed-in user's information
                                 binding.progressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(RegisterActivity.this, "Congratulations! Register successfully!", Toast.LENGTH_LONG).show();
-                                FirebaseUser user = mAuth.getCurrentUser();
                                 startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                             } else {
                                 // If sign in fails, display a message to the user.
