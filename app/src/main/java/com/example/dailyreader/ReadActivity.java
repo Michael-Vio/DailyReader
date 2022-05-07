@@ -31,7 +31,6 @@ import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 
 public class ReadActivity extends AppCompatActivity{
@@ -88,7 +87,7 @@ public class ReadActivity extends AppCompatActivity{
 
         loadBook(book.getFilepath());
         finishReadPosition = book.getReadPosition();
-        if (finishReadPosition > 8000) {
+        if (finishReadPosition >= 8000) {
             int itr = finishReadPosition / 8000;
             int skip = finishReadPosition % 8000;
             locateLastPosition(itr, skip);
@@ -166,7 +165,7 @@ public class ReadActivity extends AppCompatActivity{
         textSizeS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 17);
             }
         });
 
@@ -182,7 +181,7 @@ public class ReadActivity extends AppCompatActivity{
         textSizeL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25);
+                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 23);
             }
         });
 
@@ -224,7 +223,7 @@ public class ReadActivity extends AppCompatActivity{
             }
         }
         endPosition = skip;
-        loadPage(endPosition + 1, -2);
+        loadPage(endPosition, -2);
     }
 
     private void updateBuffer()
@@ -273,12 +272,12 @@ public class ReadActivity extends AppCompatActivity{
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            finishReadPosition += readPageView.getCharNum();
+
             if (e1.getX() - e2.getX() > 50) {
+                finishReadPosition += readPageView.getCharNum();
                 if (finishReadPosition >= new File(book.getFilepath()).length()) {
                     loadPage(endPosition, -2);
                     Toast.makeText(getApplicationContext(),"The last page" ,Toast.LENGTH_SHORT).show();
-                    return false;
                 } else {
                     endPosition += readPageView.getCharNum();
                     if (endPosition >= 8000) {
@@ -290,9 +289,10 @@ public class ReadActivity extends AppCompatActivity{
                     Toast.makeText(getApplicationContext(),endPosition + " " + finishReadPosition ,Toast.LENGTH_SHORT).show();
                 }
 
-            } else if (e2.getX() - e1.getX() > 50) {
+            }
+            if (e2.getX() - e1.getX() > 50) {
                 if (finishReadPosition == 0) {
-                    Toast.makeText(getApplicationContext(), "This is the first page", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "The first page", Toast.LENGTH_SHORT).show();
                 }
 
             }
