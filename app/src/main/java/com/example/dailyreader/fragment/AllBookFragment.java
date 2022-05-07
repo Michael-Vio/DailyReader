@@ -147,7 +147,6 @@ public class AllBookFragment extends Fragment {
         return view;
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();

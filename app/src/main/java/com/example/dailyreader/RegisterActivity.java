@@ -180,7 +180,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 String userId = user.getUid();
                                 // Sign in success, update users' information to firebase
-                                reference = FirebaseDatabase.getInstance().getReference("Users");
+                                reference = FirebaseDatabase.getInstance().getReference("User");
                                 reference.child(userId).setValue(user_info);
                                 // Sign in success, update UI with the signed-in user's information
                                 binding.progressBar.setVisibility(View.INVISIBLE);

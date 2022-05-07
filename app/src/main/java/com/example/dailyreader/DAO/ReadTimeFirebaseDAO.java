@@ -21,7 +21,7 @@ public class ReadTimeFirebaseDAO {
     public ReadTimeFirebaseDAO(String userId, String date)
     {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("User").child(userId).child("records").child(date);
+        databaseReference = firebaseDatabase.getReference("User").child(userId).child("ReadTimeRecords").child(date);
     }
 
     public Task<Void> add(ReadTime readTime) {
