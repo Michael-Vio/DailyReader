@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -56,6 +57,7 @@ public class ReportFragment extends Fragment {
 
     // date picker submit button
     Button submit;
+    String startDob;
 
 
 
@@ -73,6 +75,7 @@ public class ReportFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 replaceFragment(new AddFragment());
+
             }
         });
 

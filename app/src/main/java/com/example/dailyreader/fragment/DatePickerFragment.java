@@ -20,7 +20,6 @@ public class DatePickerFragment extends Fragment {
 
     private DatePickerFragmentBinding dateBinding;
     public DatePickerFragment(){}
-    Activity mActivity=this.getActivity();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,13 +46,50 @@ public class DatePickerFragment extends Fragment {
 
                 String dob =year1 + "-" + month1 + "-" +day1;
                 // display the values by using a toast
-                Toast.makeText(getContext(), dob, Toast.LENGTH_LONG).show();
+
+                //changeDobFormat
+                String dobAfterChange = changeDobFormat(day1,month1,year1);
+
+                Toast.makeText(getContext(), dobAfterChange, Toast.LENGTH_LONG).show();
+
+                sendStringDob(dobAfterChange);
             }
         });
         return view;
     }
 
-    public void sendDob(String dob){
+    public void sendStringDob(String dob){
+
+        // send dob to another fragment
+        Bundle result = new Bundle();
+        result.putString("bundleKey", dob);
+        getParentFragmentManager().setFragmentResult("requestKey", result);
+
+    }
+
+    public String changeDobFormat(int day, int month, int year){
+
+        String dayR;
+        String monthR;
+        String yearR;
+
+        if (day<= 10){
+            dayR = "0" +day;
+        }
+        else{
+            dayR = String.valueOf(day);
+        }
+
+        if (month<= 10){
+            monthR = "0" + month;
+        }
+        else{
+            monthR = String.valueOf(month);
+        }
+
+        yearR = String.valueOf(year);
+
+        return yearR + "-" + monthR + "-" + dayR;
 
     }
 

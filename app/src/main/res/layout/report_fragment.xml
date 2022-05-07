@@ -5,9 +5,18 @@
     android:orientation="vertical">
 
     <Button
+        android:id="@+id/setStartDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="Set Start date"
+        android:textSize="10sp" />
+
+    <Button
         android:id="@+id/addButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
         android:text="Pie Chart"
         android:textSize="10sp" />
 
@@ -15,16 +24,8 @@
         android:id="@+id/viewButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="1dp"
         android:text="Column Chart"
-        android:textSize="10sp" />
-
-    <Button
-        android:id="@+id/setStartDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Set Start date"
         android:textSize="10sp" />
 
     <androidx.fragment.app.FragmentContainerView
