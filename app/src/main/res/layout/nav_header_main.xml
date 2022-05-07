@@ -5,6 +5,22 @@
     android:layout_height="200dp"
     android:background="@drawable/side_nav_bar"
     android:gravity="bottom"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:theme="@style/ThemeOverlay.MaterialComponents.Dark">
+
+    <TextView
+        android:id="@+id/username_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="Welcome!"
+        android:layout_marginBottom="10dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_weight="2"
+        app:srcCompat="@drawable/android_reading" />
+
 </LinearLayout>
