@@ -3,7 +3,6 @@ package com.example.dailyreader;
 import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -39,6 +38,7 @@ public class UploadWorker extends Worker {
         Log.d("synToFirebase()", "method end");
     }
 
+    @NonNull
     @Override
     public Result doWork() {
 
