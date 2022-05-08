@@ -2,31 +2,29 @@ package com.example.dailyreader.repository;
 
 import android.app.Application;
 import android.os.Build;
-
 import androidx.annotation.RequiresApi;
-import androidx.lifecycle.LiveData;
-
 import com.example.dailyreader.DAO.ReadTimeDAO;
 import com.example.dailyreader.database.ReadTimeDatabase;
 import com.example.dailyreader.entity.ReadTime;
-
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 public class ReadTimeRepository {
     private final ReadTimeDAO readTimeDao;
-    private final List<ReadTime> allReadTimes;
 
     public ReadTimeRepository(Application application){
         ReadTimeDatabase ReadTimeDb = ReadTimeDatabase.getInstance(application);
         readTimeDao = ReadTimeDb.readTimeDAO();
-        allReadTimes = readTimeDao.getAll();
     }
-    // Room executes this query on a separate thread
-    public List<ReadTime> getAllReadTimes() {
 
-        return allReadTimes;
+    public CompletableFuture<List<ReadTime>> getAllReadTimes() {
+        return CompletableFuture.supplyAsync(new Supplier<List<ReadTime>>() {
+            @Override
+            public List<ReadTime> get() {
+                return readTimeDao.getAll();
+            }
+        }, ReadTimeDatabase.databaseWriteExecutor);
     }
 
     public void insert(final ReadTime readTime){
@@ -56,7 +54,7 @@ public class ReadTimeRepository {
             }
         });
     }
-    public void updateReadTime(final ReadTime readTime){
+    public void update(final ReadTime readTime){
         ReadTimeDatabase.databaseWriteExecutor.execute(new Runnable() {
             @Override
             public void run() {

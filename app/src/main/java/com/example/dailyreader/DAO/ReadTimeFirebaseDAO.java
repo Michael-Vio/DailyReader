@@ -8,18 +8,18 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 
 public class ReadTimeFirebaseDAO {
     private final DatabaseReference databaseReference;
+    private String date;
 
     public ReadTimeFirebaseDAO(String userId, String date)
     {
+        this.date = date;
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("User").child(userId).child("ReadTimeRecords").child(date);
     }
@@ -57,31 +57,12 @@ public class ReadTimeFirebaseDAO {
         });
     }
 
-    public List<ReadTime> getReadTime(List<String> date) {
-        List<ReadTime> readTimes = new ArrayList<>();
-        databaseReference.getParent();
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    for (int i = 0; i < date.size(); i++) {
-                        if (dataSnapshot.getKey().equals(date.get(i))) {
-                            String readDate = (String) dataSnapshot.child("readDate").getValue();
-                            String readMinute = (String) dataSnapshot.child("readTime").getValue();
-                            ReadTime readTime = new ReadTime(readDate,Integer.parseInt(readMinute));
-                            readTimes.add(readTime);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-        return readTimes;
+    public Query get() {
+        if (date == null) {
+            return null;
+        } else {
+            return databaseReference.orderByKey().startAfter(date).limitToFirst(7);
+        }
     }
 
 }
