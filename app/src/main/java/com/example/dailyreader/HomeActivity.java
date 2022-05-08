@@ -67,7 +67,7 @@ public class HomeActivity extends AppCompatActivity {
                 String username = snapshot.child("username").getValue().toString();
                 String email = snapshot.child("user_email").getValue().toString();
                 TextView test = binding.navView.getHeaderView(0).findViewById(R.id.username_email);
-                test.setText(username+"\n"+email);
+                test.setText(username+"\n"+"\n"+email);
             }
 
             @Override

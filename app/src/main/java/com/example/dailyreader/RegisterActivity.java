@@ -3,7 +3,6 @@ package com.example.dailyreader;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -24,9 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -34,7 +31,6 @@ public class RegisterActivity extends AppCompatActivity {
     private RegisterActivityBinding binding;
     private FirebaseAuth mAuth;
     private DatabaseReference reference;
-    private FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +63,6 @@ public class RegisterActivity extends AppCompatActivity {
         
         binding.submitButton.setOnClickListener(v ->{
             submitCheck();
-            User user_info = new User(binding.emailInput.getText().toString(), binding.usernameInput.getText().toString(),
-                    binding.genderInput.getSelectedItem().toString(), binding.addressInput.getText().toString());
-            Map<String, User> userMap = new HashMap<>();
-            userMap.put(binding.emailInput.getText().toString(), user_info);
         });
 
 
@@ -98,14 +90,37 @@ public class RegisterActivity extends AppCompatActivity {
         boolean validPassword = false;
         String passwordInput = binding.passwordInput.getText().toString();
         String repeatPasswordInput = binding.repeatPasswordInput.getText().toString();
+        // Check uppercase, lowercase letters and number
+        boolean containNum = false;
+        boolean containUp = false;
+        boolean containLow = false;
+        for(int i = 0; i < passwordInput.length(); i++){
+            char character = passwordInput.charAt(i);
+            if(Character.isDigit(character)){containNum = true;}
+            if(Character.isUpperCase(character)){containUp = true;}
+            if(Character.isLowerCase(character)){containLow = true;}
+        }
         // Empty password input
         if(passwordInput.isEmpty()){
             binding.passwordError.setError(getResources().getString(R.string.password_empty_error));
             validPassword = false;
         }
         // Password length error
-        else if(passwordInput.length() < 8){
+        else if(passwordInput.length() < 9){
             binding.passwordError.setError(getResources().getString(R.string.password_length_error));
+            validPassword = false;
+        }
+        // Upper and lowercase letters and number
+        else if(containLow == false){
+            binding.passwordError.setError(getResources().getString(R.string.password_lower_error));
+            validPassword = false;
+        }
+        else if(containUp == false){
+            binding.passwordError.setError(getResources().getString(R.string.password_upper_error));
+            validPassword = false;
+        }
+        else if(containNum == false){
+            binding.passwordError.setError(getResources().getString(R.string.password_num_error));
             validPassword = false;
         }
         // Whitespace error
