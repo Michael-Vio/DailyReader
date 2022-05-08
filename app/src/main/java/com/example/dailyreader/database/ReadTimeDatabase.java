@@ -28,14 +28,14 @@ public abstract class ReadTimeDatabase extends RoomDatabase {
                     .fallbackToDestructiveMigration()
 
                     //add call back to our database.
-                    .addCallback(readRoomDatabaseCallback)
+                    //.addCallback(readRoomDatabaseCallback)
                     .build();
         }
         return INSTANCE;
     }
 
 
-    //Examples for reading time to test the report screen
+    /*//Examples for reading time to test the report screen
     private static RoomDatabase.Callback readRoomDatabaseCallback = new RoomDatabase.Callback() {
 
         @Override
@@ -62,6 +62,6 @@ public abstract class ReadTimeDatabase extends RoomDatabase {
             });
         }
 
-        };
+        };*/
 
 }
