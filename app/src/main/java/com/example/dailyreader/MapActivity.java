@@ -1,10 +1,9 @@
 package com.example.dailyreader;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
-import com.example.dailyreader.R;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.mapbox.geojson.Point;
 import com.mapbox.maps.CameraOptions;
 import com.mapbox.maps.MapView;
@@ -21,6 +20,19 @@ public class MapActivity extends AppCompatActivity {
         final Point point = Point.fromLngLat(145.045837, -37.876823 );
 
         mapView = findViewById(R.id.mapView);
+
+//        mapView.addMarker(new MarkerOptions()
+//                .position(new LatLng(48.85819, 2.29458))
+//                .title("Eiffel Tower"));
+
+//        mapView?.getMapboxMap()?.loadStyleUri(
+//                Style.MAPBOX_STREETS,
+//                object : Style.OnStyleLoaded {
+//            override fun onStyleLoaded(style: Style) {
+//                addAnnotationToMap()
+//            }
+//        }
+//)
 
         CameraOptions cameraPosition = new CameraOptions.Builder()
                 .zoom(13.0)

@@ -7,16 +7,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.fragment.app.Fragment;
-
-import com.example.dailyreader.DAO.ReadTimeDAO;
-import com.example.dailyreader.DAO.ReadTimeFirebaseDAO;
-import com.example.dailyreader.HomeActivity;
 import com.example.dailyreader.MainActivity;
-import com.example.dailyreader.database.ReadTimeDatabase;
 import com.example.dailyreader.databinding.LogoutFragmentBinding;
-import com.example.dailyreader.viewmodel.ReadTimeViewModel;
+import com.example.dailyreader.repository.ReadTimeRepository;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -33,9 +27,8 @@ public class LogoutFragment extends Fragment {
         View view = logoutBinding.getRoot();
         logoutBinding.backButton.setOnClickListener(v ->{
             FirebaseAuth.getInstance().signOut();
-            ReadTimeDatabase readTimeDatabase = ReadTimeDatabase.getInstance(getContext());
-            ReadTimeDAO readTimeDAO = readTimeDatabase.readTimeDAO();
-            readTimeDAO.deleteAll();
+            ReadTimeRepository readTimeRepository = new ReadTimeRepository(getActivity().getApplication());
+            readTimeRepository.deleteAll();
             Intent i = new Intent(getActivity(), MainActivity.class);
             startActivity(i);(
                     (Activity) getActivity()).overridePendingTransition(0,0);

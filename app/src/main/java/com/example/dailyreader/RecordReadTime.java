@@ -1,8 +1,11 @@
 package com.example.dailyreader;
 
 
+import android.app.Application;
+
 import com.example.dailyreader.entity.ReadTime;
-import com.example.dailyreader.viewmodel.ReadTimeViewModel;
+import com.example.dailyreader.repository.ReadTimeRepository;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,10 +17,11 @@ public class RecordReadTime {
     private Date startTime;
     private Date endTime;
     private String startDate;
-    private ReadTimeViewModel readTimeViewModel;
+    private ReadTimeRepository readTimeRepository;
 
-    public RecordReadTime(ReadTimeViewModel readTimeViewModel) {
-        this.readTimeViewModel = readTimeViewModel;
+
+    public RecordReadTime(Application application) {
+        readTimeRepository = new ReadTimeRepository(application);
     }
 
     public void startRecord() {
@@ -42,16 +46,16 @@ public class RecordReadTime {
         if (readTime != null) {
             int newMinutes = readTime.getReadTime() + minutes;
             readTime.setReadTime(newMinutes);
-            readTimeViewModel.update(readTime);
+            readTimeRepository.update(readTime);
         } else {
             readTime = new ReadTime(startDate, minutes);
-            readTimeViewModel.insert(readTime);
+            readTimeRepository.insert(readTime);
         }
     }
 
     public ReadTime findRecord(String date) {
         ReadTime readTime = null;
-        CompletableFuture<ReadTime> readTimeCompletableFuture =  readTimeViewModel.findByDateFuture(date);
+        CompletableFuture<ReadTime> readTimeCompletableFuture =  readTimeRepository.findByDateFuture(date);
         try {
             readTime = readTimeCompletableFuture.get();
         } catch (ExecutionException | InterruptedException e) {
