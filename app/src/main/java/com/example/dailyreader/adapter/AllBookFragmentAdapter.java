@@ -3,28 +3,27 @@ package com.example.dailyreader.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.dailyreader.R;
 import com.example.dailyreader.ReadActivity;
 import com.example.dailyreader.entity.Book;
 import com.example.dailyreader.viewmodel.BookViewModel;
+
 import java.util.List;
 
 public class AllBookFragmentAdapter extends RecyclerView.Adapter<AllBookFragmentAdapter.ViewHolder> {
     private List<Book> books;
-    private BookViewModel bookViewModel;
+    private final BookViewModel bookViewModel;
     private Context context;
     private View view;
 
@@ -34,7 +33,7 @@ public class AllBookFragmentAdapter extends RecyclerView.Adapter<AllBookFragment
         this.bookViewModel = bookViewModel;
     }
 
-    //creates a new viewholder that is constructed with a new View, inflated from a layout
+    //creates a new viewHolder that is constructed with a new View, inflated from a layout
     @NonNull
     @Override
     public AllBookFragmentAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -59,36 +58,22 @@ public class AllBookFragmentAdapter extends RecyclerView.Adapter<AllBookFragment
         holder.itemView.setTag(position);
 
 
-        holder.coverPage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ReadActivity.class);
-                intent.putExtra("bookInfo", book.getUid());
-                v.getContext().startActivity(intent);
-            }
+        holder.coverPage.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), ReadActivity.class);
+            intent.putExtra("bookInfo", book.getBid());
+            v.getContext().startActivity(intent);
         });
 
-        holder.itemDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bookViewModel.delete(book);
-                notifyDataSetChanged();
-            }
+        holder.itemDelete.setOnClickListener(v -> {
+            bookViewModel.delete(book);
+            notifyItemRemoved(holder.getLayoutPosition());
         });
 
-        holder.setGoal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showPopupWindow(holder, book);
-//                Toast.makeText(v.getContext(),  readingGoal, Toast.LENGTH_SHORT);
-            }
-        });
+        holder.setGoal.setOnClickListener(v -> showPopupWindow(book));
 
     }
 
-    // this method binds the view holder created with data that will be displayed
-
-    public void showPopupWindow(ViewHolder holder, Book book) {
+    public void showPopupWindow(Book book) {
         View contentView = LayoutInflater.from(context).inflate(R.layout.set_goal_popup_window, null);
         PopupWindow popupWindow = new PopupWindow(contentView);
         popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -97,19 +82,15 @@ public class AllBookFragmentAdapter extends RecyclerView.Adapter<AllBookFragment
         popupWindow.setFocusable(true);
         popupWindow.update();
 
-        EditText goal = contentView.findViewById(R.id.goal);
+        NumberPicker readGoal = contentView.findViewById(R.id.read_goal);
+        readGoal.setMinValue(0);
+        readGoal.setMaxValue(100);
         Button ok = contentView.findViewById(R.id.ok_btn);
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String input = goal.getText().toString();
-                if (!input.isEmpty()) {
-                    int goal = Integer.parseInt(input);
-                    if (goal > 0 && goal <= 100) {
-                        book.setReadGoal(goal);
-                        bookViewModel.update(book);
-                    }
-                }
+        ok.setOnClickListener(v -> {
+            int goal = readGoal.getValue();
+            if (goal != 0) {
+                book.setReadGoal(goal);
+                bookViewModel.update(book);
             }
         });
 

@@ -5,15 +5,13 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
-
 import com.example.dailyreader.DAO.ReadTimeDAO;
 import com.example.dailyreader.DAO.ReadTimeFirebaseDAO;
 import com.example.dailyreader.database.ReadTimeDatabase;
 import com.example.dailyreader.entity.ReadTime;
 import com.google.firebase.auth.FirebaseAuth;
-
-
 import java.util.List;
+import java.util.Objects;
 
 
 public class UploadWorker extends Worker {
@@ -28,7 +26,7 @@ public class UploadWorker extends Worker {
         Log.d("synToFirebase()", "retrieve data from room");
         List<ReadTime> readTimeList = readTimeDAO.getAll();
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        String userId = firebaseAuth.getCurrentUser().getUid();
+        String userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         Log.d("synToFirebase()", "synchronize to firebase");
         for (ReadTime readTime : readTimeList) {
             ReadTimeFirebaseDAO firebaseDAO = new ReadTimeFirebaseDAO(userId, readTime.getReadDate());

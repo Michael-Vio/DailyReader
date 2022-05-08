@@ -31,6 +31,9 @@ public class Book {
         this.readGoal = readGoal;
     }
 
+    public int getBid() {
+        return bid;
+    }
 
     @NonNull
     public String getBookName() {
@@ -41,7 +44,6 @@ public class Book {
     public String getFilepath() {
         return filepath;
     }
-
 
     public int getReadPosition() {
         return readPosition;
