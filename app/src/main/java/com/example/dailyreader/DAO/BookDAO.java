@@ -13,8 +13,10 @@ import java.util.List;
 
 @Dao
 public interface BookDAO {
-    @Query("SELECT * FROM book ORDER BY uid ASC")
+    @Query("SELECT * FROM book ORDER BY bid ASC")
     LiveData<List<Book>> getAll();
+    @Query("SELECT * FROM book ORDER BY bid ASC")
+    List<Book> getBookList();
     @Query("SELECT * FROM book WHERE uid = :bookId LIMIT 1")
     Book findById(int bookId);
     @Insert

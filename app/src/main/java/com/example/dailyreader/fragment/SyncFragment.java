@@ -12,9 +12,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.dailyreader.R;
 import com.example.dailyreader.databinding.SyncFragmentBinding;
+import com.example.dailyreader.entity.Book;
+import com.example.dailyreader.viewmodel.BookViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 
 public class SyncFragment extends Fragment {
@@ -53,7 +61,24 @@ public class SyncFragment extends Fragment {
 //                    Pass the title, location, and description values inside the intent using PutExtra.
                     intent.putExtra(CalendarContract.Events.TITLE, title.getText().toString());
                     intent.putExtra(CalendarContract.Events.EVENT_LOCATION, location.getText().toString());
-                    intent.putExtra(CalendarContract.Events.DESCRIPTION, description.getText().toString());
+
+                    BookViewModel bookViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().getApplication()).create(BookViewModel.class);
+                    List<Book> books = new ArrayList<>();
+                    CompletableFuture<List<Book>> bookList = bookViewModel.getBookList();
+                    try {
+                        books = bookList.get();
+                    } catch (ExecutionException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    StringBuilder readGoals = new StringBuilder();
+                    for (Book book : books) {
+                        if (book.getReadGoal() != 0) {
+                            readGoals.append(book.getBookName()).append(" ").append(book.getReadGoal()).append("Pages\n");
+                        }
+                    }
+
+                    intent.putExtra(CalendarContract.Events.DESCRIPTION, readGoals.toString());
+
 
 //                    Set the event type so that it will be able available all day without start and end time.
                     intent.putExtra(CalendarContract.Events.ALL_DAY, true);

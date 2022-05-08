@@ -9,7 +9,9 @@ import androidx.lifecycle.LiveData;
 
 import com.example.dailyreader.DAO.BookDAO;
 import com.example.dailyreader.database.BookDatabase;
+import com.example.dailyreader.database.ReadTimeDatabase;
 import com.example.dailyreader.entity.Book;
+import com.example.dailyreader.entity.ReadTime;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -29,6 +31,15 @@ public class BookRepository {
     public LiveData<List<Book>> getAllBooks() {
 
         return allBooks;
+    }
+
+    public CompletableFuture<List<Book>> getBookList() {
+        return CompletableFuture.supplyAsync(new Supplier<List<Book>>() {
+            @Override
+            public List<Book> get() {
+                return bookDao.getBookList();
+            }
+        }, BookDatabase.databaseWriteExecutor);
     }
 
     public void insert(final Book book){

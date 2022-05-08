@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.dailyreader.entity.Book;
 import com.example.dailyreader.viewmodel.BookViewModel;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -123,66 +122,33 @@ public class ReadActivity extends AppCompatActivity{
         popupWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
 
         ImageView backBtn = contentView.findViewById(R.id.back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ReadActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
+        backBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(ReadActivity.this, MainActivity.class);
+            startActivity(intent);
         });
 
         Button finishSetting = contentView.findViewById(R.id.finish);
-        finishSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindow.dismiss();
-            }
-        });
-
-        Button themeWhite = contentView.findViewById(R.id.theme_white);
-        themeWhite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ReadActivity.this.findViewById(R.id.read_activity_layout).setBackgroundColor(Color.WHITE);
-            }
-        });
         Button themeGreen = contentView.findViewById(R.id.theme_green);
-        themeGreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ReadActivity.this.findViewById(R.id.read_activity_layout).setBackgroundColor(Color.parseColor("#C7EDCC"));
-            }
-        });
+        Button themeWhite = contentView.findViewById(R.id.theme_white);
         Button themeOriginal = contentView.findViewById(R.id.theme_original);
-        themeOriginal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ReadActivity.this.findViewById(R.id.read_activity_layout).setBackgroundColor(Color.parseColor("#BEA592"));
-            }
-        });
         Button textSizeS = contentView.findViewById(R.id.s_button);
-        textSizeS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-            }
-        });
-
         Button textSizeM = contentView.findViewById(R.id.m_button);
-        textSizeM.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20);
-            }
-        });
-
         Button textSizeL = contentView.findViewById(R.id.l_button);
-        textSizeL.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22);
-            }
-        });
+
+        finishSetting.setOnClickListener(v -> popupWindow.dismiss());
+
+        themeWhite.setOnClickListener(v -> ReadActivity.this.findViewById(R.id.read_activity_layout).setBackgroundColor(Color.WHITE));
+
+        themeGreen.setOnClickListener(v -> ReadActivity.this.findViewById(R.id.read_activity_layout).setBackgroundColor(Color.parseColor("#C7EDCC")));
+
+        themeOriginal.setOnClickListener(v -> ReadActivity.this.findViewById(R.id.read_activity_layout).setBackgroundColor(Color.parseColor("#BEA592")));
+
+        textSizeS.setOnClickListener(v -> readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18));
+
+        textSizeM.setOnClickListener(v -> readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20));
+
+
+        textSizeL.setOnClickListener(v -> readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22));
 
         popupWindow.showAsDropDown(findViewById(R.id.read_activity_layout));
     }

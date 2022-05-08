@@ -30,13 +30,9 @@ public class ReadPageView extends androidx.appcompat.widget.AppCompatTextView {
 
 
     public int getCharNum() {
-        return getLayout().getLineEnd(getLineNum());
-    }
-
-
-    public int getLineNum() {
         int lastLine = getHeight() - getPaddingTop() - getPaddingBottom() - getLineHeight();
-        return getLayout().getLineForVertical(lastLine);
+        int totalLines = getLayout().getLineForVertical(lastLine);
+        return getLayout().getLineEnd(totalLines);
     }
 }
 

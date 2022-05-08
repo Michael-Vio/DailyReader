@@ -34,6 +34,11 @@ public class BookViewModel extends AndroidViewModel {
 
         return allBooks;
     }
+
+    public CompletableFuture<List<Book>> getBookList() {
+        return bRepository.getBookList();
+    }
+
     public void insert(Book book) {
 
         bRepository.insert(book);
