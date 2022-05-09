@@ -10,6 +10,8 @@ import android.widget.DatePicker;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.dailyreader.R;
 import com.example.dailyreader.databinding.DatePickerFragmentBinding;
@@ -41,7 +43,7 @@ public class DatePickerFragment extends Fragment {
         DatePicker simpleDatePicker = (DatePicker)view.findViewById(R.id.simpleDatePicker); // initiate a date picker
 
         // set the min date and max date
-        setMinAndMaxDate(simpleDatePicker,2022,4,1);
+        //setMinAndMaxDate(simpleDatePicker,2022,4,1);
 
         Button submitButton = view.findViewById(R.id.submitButton);
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +72,8 @@ public class DatePickerFragment extends Fragment {
                 Toast.makeText(getContext(), dobAfterChange, Toast.LENGTH_LONG).show();
 
                 sendStringDob(dobAfterChange);
+
+
             }
         });
 
@@ -115,6 +119,13 @@ public class DatePickerFragment extends Fragment {
         return view;
     }
 
+    private void replaceFragment(Fragment nextFragment) {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.date_picker_fragment, nextFragment);
+        fragmentTransaction.commit();
+    }
+
     public void setMinAndMaxDate(DatePicker datePicker,int year, int month, int day){
 
         // set the min date and max date
@@ -141,14 +152,14 @@ public class DatePickerFragment extends Fragment {
         String monthR;
         String yearR;
 
-        if (day<= 10){
+        if (day< 10){
             dayR = "0" +day;
         }
         else{
             dayR = String.valueOf(day);
         }
 
-        if (month<= 10){
+        if (month< 10){
             monthR = "0" + month;
         }
         else{

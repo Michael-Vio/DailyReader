@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/nav_report_fragment"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
+
 
     <Button
         android:id="@+id/setStartDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="1dp"
         android:text="Set Start date"
         android:textSize="10sp" />
+
+    <Button
+        android:id="@+id/setEndDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="Set End date"
+        android:textSize="10sp" />
+
 
     <Button
         android:id="@+id/addButton"
@@ -34,15 +46,13 @@
         android:layout_height="match_parent"
         android:layout_marginTop="10dp" />
 
-    <ProgressBar
+    <!--<ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-        <!--app:layout_constraintBottom_toBottomOf="parent"
+        &lt;!&ndash;app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"-->
-
-
+        app:layout_constraintTop_toTopOf="parent"&ndash;&gt;-->
 
 </LinearLayout>

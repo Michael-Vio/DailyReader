@@ -28,6 +28,7 @@ import com.anychart.charts.Pie;
 import com.anychart.enums.Align;
 import com.anychart.enums.LegendLayout;
 import com.example.dailyreader.databinding.AddFragmentBinding;
+import com.example.dailyreader.repository.ReadTimeRepository;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -73,8 +74,11 @@ public class AddFragment extends Fragment {
     int day; //今天
 
     String startDob = null;
-
+    String endDob = null;
+    int readTime = 0;
     private DatabaseReference mDatabase;
+
+    ReadTimeRepository readTimeRepository;
 
 
     @Override
@@ -84,25 +88,51 @@ public class AddFragment extends Fragment {
         addBinding = AddFragmentBinding.inflate(inflater, container, false);
         View view = addBinding.getRoot();
 
-
-
         if(startDob == null){
             Toast.makeText(getContext(), "Please set the start date first!", Toast.LENGTH_LONG).show();
         }
 
-
         receiveStringDobAndGeneratePieChart(view);
+
+        readTimeRepository = new ReadTimeRepository(getActivity().getApplication());
 
         return view;
     }
 
-    public int getDataFromDatabase(String dob){
+    public void getReadTimeFromRoom(List<String> date){
+        List<Integer> readTime;
+    }
+
+    public String receiveStringDobAndGeneratePieChart(View view){
+
+        String dob;
+        //get the dob from another fragment
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
+                // We use a String here, but any type that can be put in a Bundle is supported
+                startDob = bundle.getString("bundleKey");
+                Log.d("startDob111", startDob);
+                //endDob = bundle.getString("bundleKey1");
+                //Log.d("endDate111", endDob);
+
+
+                getDataFromDatabaseAndGeneratePieChart(view, startDob);
+
+
+
+            }
+        });
+        return startDob;
+    }
+
+    public int getDataFromDatabaseAndGeneratePieChart(View view,String dob){
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         String date = dob; // 你要获取的日期
 
-        final int[] readTime = new int[1];
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("User").child(userId).child("ReadTimeRecords").child(date).child("readTime");
 
@@ -116,32 +146,22 @@ public class AddFragment extends Fragment {
                 else {
 
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                    readTime[0] = Integer.parseInt(String.valueOf(task.getResult().getValue()));
+                    readTime = Integer.valueOf(String.valueOf(task.getResult().getValue()));
+                    Log.d("readTimeIngetDataFromDatabase", String.valueOf(readTime));
+
+                    generatePieChart(view,startDob,readTime);
+
 
                 }
             }
-        });
 
-        return readTime[0];
+        });
+        return readTime;
+
+
 
     }
 
-    public void receiveStringDobAndGeneratePieChart(View view){
-
-        //get the dob from another fragment
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
-                // We use a String here, but any type that can be put in a Bundle is supported
-                startDob = bundle.getString("bundleKey");
-
-                int readTime = getDataFromDatabase(startDob);
-
-                // Do something with the result...
-                generatePieChart(view,startDob,readTime);
-            }
-        });
-    }
 
 
 

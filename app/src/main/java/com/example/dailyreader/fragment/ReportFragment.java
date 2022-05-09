@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -41,6 +42,7 @@ public class ReportFragment extends Fragment {
     Button submit;
     String startDob;
 
+    Fragment f;
 
 
     public ReportFragment () {}
@@ -50,6 +52,30 @@ public class ReportFragment extends Fragment {
                              Bundle savedInstanceState) {
         reportBinding = ReportFragmentBinding.inflate(inflater, container, false);
         View view = reportBinding.getRoot();
+
+        //date picker
+        Button setStartDate = view.findViewById(R.id.setStartDate);
+        setStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //setStartDate.setEnabled(false);
+                replaceFragment(new DatePickerFragment());
+
+            }
+        });
+
+        //date picker end
+        Button setEndDate = view.findViewById(R.id.setEndDate);
+        setEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //setEndDate.setEnabled(false);
+                replaceFragment(new DatePickerEndFragment());
+
+            }
+        });
 
         //pie chart
         Button addButton = view.findViewById(R.id.addButton);
@@ -70,91 +96,20 @@ public class ReportFragment extends Fragment {
             }
         });
 
-        //date picker
-        Button setStartDate = view.findViewById(R.id.setStartDate);
-        setStartDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                replaceFragment(new DatePickerFragment());
-            }
-        });
-
-        //Report screen
-        /*readTimeViewModel = new ViewModelProvider(this).get(ReadTimeViewModel.class);
-        LiveData<List<ReadTime>> readTimeList = readTimeViewModel.getAllReadTimes();*/
-
-        //generatePieChart(view);
-        //generateColChart(view);
-
-
-
-
-        //Button button = view.findViewById(R.id.changeChart);
-        //button.setOnClickListener(new View.OnClickListener() {
-
-           // @Override
-            //public void onClick(View v) {
-                /*// Perform action on click
-
-
-                //FragmentManager fragmentManager = getFragmentManager();
-
-                //fragmentManager.beginTransaction().replace(R.id.nav_report_fragment1, fragmentManager).commit();*/
-
-           // }
-       // });
-
-
-
-
-        /*Switch mSwitch = (Switch) view.findViewById(R.id.switch1);
-
-        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    // The toggle is enabled
-
-                    generateColChart(view);
-
-                } else {
-                    // The toggle is disabled
-                    generatePieChart(view);
-
-
-                }
-            }
-        });*/
-
-        /*f(mSwitch.isChecked()){
-            anyChartView.setChart(pie);;
-        }
-        else{
-            anyChartView.setChart(cartesian);
-        }*/
-
-        //Generate pie chart
-        //anyChartView.setChart(pie);
-
-        //Generate column chart
-        //anyChartView.setChart(cartesian);
-
-        /*APIlib.getInstance().setActiveAnyChartView(anyChartView);
-        pie.title("First chart");
-        APIlib.getInstance().setActiveAnyChartView(anyChartView1);
-        cartesian.title("Second chart");*/
-
-
-
 
         return view;
     }
+
+
 
     private void replaceFragment(Fragment nextFragment) {
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container_view, nextFragment);
+        //fragmentTransaction.hide(fragmentManager).show(nextFragment).commit();
+        //fragmentTransaction.hide(f);
         fragmentTransaction.commit();
+
     }
 
     /*public void generatePieChart(View view){
