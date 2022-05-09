@@ -28,13 +28,20 @@ import com.anychart.charts.Pie;
 import com.anychart.enums.Align;
 import com.anychart.enums.LegendLayout;
 import com.example.dailyreader.databinding.AddFragmentBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.TimeZone;
 
 public class AddFragment extends Fragment {
@@ -66,6 +73,8 @@ public class AddFragment extends Fragment {
     int day; //今天
 
     String startDob = null;
+    int readTime;
+    private DatabaseReference mDatabase;
 
 
     @Override
@@ -75,12 +84,47 @@ public class AddFragment extends Fragment {
         addBinding = AddFragmentBinding.inflate(inflater, container, false);
         View view = addBinding.getRoot();
 
+
+
         if(startDob == null){
             Toast.makeText(getContext(), "Please set the start date first!", Toast.LENGTH_LONG).show();
         }
+
+
         receiveStringDobAndGeneratePieChart(view);
 
         return view;
+    }
+
+    public void getDataFromDatabase(String dob){
+
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        String userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        String date = dob; // 你要获取的日期
+
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("User").child(userId).child("ReadTimeRecords").child(date).child("readTime");
+
+        myRef.get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+
+                }
+                else {
+
+                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
+                    readTime = Integer.valueOf(String.valueOf(task.getResult()));
+
+                }
+            }
+
+        });
+
+
+
     }
 
     public void receiveStringDobAndGeneratePieChart(View view){
@@ -91,8 +135,11 @@ public class AddFragment extends Fragment {
             public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
                 // We use a String here, but any type that can be put in a Bundle is supported
                 startDob = bundle.getString("bundleKey");
+
+                getDataFromDatabase(startDob);
+
                 // Do something with the result...
-                generatePieChart(view,startDob);
+                generatePieChart(view,startDob,readTime);
             }
         });
     }
@@ -244,17 +291,8 @@ public class AddFragment extends Fragment {
 
     }
 
-    public void generateDatePicker(View view){
 
-
-
-
-
-
-
-    }
-
-    public void generatePieChart(View view,String dob){
+    public void generatePieChart(View view,String dob,int readTime){
 
         //AnyChart implement
         //setContentView(R.layout.activity_chart_common);
@@ -268,7 +306,8 @@ public class AddFragment extends Fragment {
 
         //get the data from the list
 
-        mPie.data(createDataWithDob(dob));
+
+        mPie.data(createDataWithDob(dob, this.readTime));
 
         mPie.title("Your daily reading time");
 
@@ -291,7 +330,7 @@ public class AddFragment extends Fragment {
 
     }
 
-    public List<DataEntry> createDataWithDob(String dob)
+    public List<DataEntry> createDataWithDob(String dob, int readTime)
     {
         String[] number = dob.split("[-]");
 
@@ -314,7 +353,7 @@ public class AddFragment extends Fragment {
 
         List<DataEntry> data1 = new ArrayList<>();
 
-        data1.add(new ValueDataEntry(startDob, 10));
+        data1.add(new ValueDataEntry(startDob, readTime));
         data1.add(new ValueDataEntry(date1, 22));
         data1.add(new ValueDataEntry(date2, 32));
         data1.add(new ValueDataEntry(date3, 44));

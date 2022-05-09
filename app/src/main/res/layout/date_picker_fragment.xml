@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
+
+    <!-- spinner mode of a date picker -->
 
     <DatePicker
         android:id="@+id/simpleDatePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:datePickerMode="spinner" /> <!-- spinner mode of a date picker -->
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:gravity="center" />
 
     <Button
         android:id="@+id/submitButton"
@@ -15,11 +20,32 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/simpleDatePicker"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="1dp"
         android:background="#150"
-        android:text="SUBMIT"
+        android:text="Submit your start date"
         android:textColor="#fff"
-        android:textSize="20sp"
+        android:textSize="10sp"
         android:textStyle="bold" />
+
+    <!--<DatePicker
+        android:id="@+id/simpleDatePickerForEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/submitButton"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner" /> &lt;!&ndash; spinner mode of a date picker &ndash;&gt;
+
+    <Button
+        android:id="@+id/submitButtonForEnd"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/simpleDatePickerForEnd"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="1dp"
+        android:background="#150"
+        android:text="Submit your end date"
+        android:textColor="#fff"
+        android:textSize="10sp"
+        android:textStyle="bold" />-->
 
 </RelativeLayout>
