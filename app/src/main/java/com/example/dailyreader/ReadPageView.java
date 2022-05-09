@@ -20,13 +20,18 @@ public class ReadPageView extends androidx.appcompat.widget.AppCompatTextView {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
+        resize();
     }
 
-//    public int resize() {
-//        CharSequence newContent = getText().subSequence(0, getCharNum());
-//        setText(newContent);
-//        return getText().length() - newContent.length();
-//    }
+    public void resize() {
+        postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                CharSequence newContent = getText().subSequence(0, getCharNum());
+                setText(newContent);
+            }
+        }, 300);
+    }
 
 
     public int getCharNum() {
@@ -34,5 +39,7 @@ public class ReadPageView extends androidx.appcompat.widget.AppCompatTextView {
         int totalLines = getLayout().getLineForVertical(lastLine);
         return getLayout().getLineEnd(totalLines);
     }
+
+
 }
 

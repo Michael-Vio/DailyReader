@@ -108,7 +108,7 @@ public class AllBookFragment extends Fragment {
 //        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
         PeriodicWorkRequest uploadWorkRequest = new PeriodicWorkRequest.Builder(UploadWorker.class, 24, TimeUnit.HOURS).build();
 
-        binding.startWorkmanager.setOnClickListener(new View.OnClickListener() {
+        binding.startWorkManager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 workManager.enqueue(uploadWorkRequest);

@@ -4,8 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+import com.example.dailyreader.IntegerConverter;
+import java.util.List;
 
 @Entity
+
 public class Book {
     @PrimaryKey(autoGenerate = true)
     public int bid;
@@ -19,12 +23,13 @@ public class Book {
     public String filepath;
 
     @ColumnInfo(name = "read_position")
-    public int readPosition;
+    @TypeConverters(IntegerConverter.class)
+    public List<Integer> readPosition;
 
     @ColumnInfo(name = "read_goal")
     public int readGoal;
 
-    public Book(@NonNull String bookName, @NonNull String filepath, int readPosition, int readGoal) {
+    public Book(@NonNull String bookName, @NonNull String filepath, List<Integer> readPosition, int readGoal) {
         this.bookName = bookName;
         this.filepath = filepath;
         this.readPosition = readPosition;
@@ -45,11 +50,11 @@ public class Book {
         return filepath;
     }
 
-    public int getReadPosition() {
+    public List<Integer> getReadPosition() {
         return readPosition;
     }
 
-    public void setReadPosition(int readPosition) {
+    public void setReadPosition(List<Integer> readPosition) {
         this.readPosition = readPosition;
     }
 
@@ -60,6 +65,8 @@ public class Book {
     public void setReadGoal(int readGoal) {
         this.readGoal = readGoal;
     }
+
+
 }
 
 

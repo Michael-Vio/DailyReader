@@ -73,7 +73,7 @@ public class AddFragment extends Fragment {
     int day; //今天
 
     String startDob = null;
-    int readTime;
+
     private DatabaseReference mDatabase;
 
 
@@ -96,13 +96,13 @@ public class AddFragment extends Fragment {
         return view;
     }
 
-    public void getDataFromDatabase(String dob){
+    public int getDataFromDatabase(String dob){
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         String date = dob; // 你要获取的日期
 
-
+        final int[] readTime = new int[1];
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("User").child(userId).child("ReadTimeRecords").child(date).child("readTime");
 
@@ -116,14 +116,13 @@ public class AddFragment extends Fragment {
                 else {
 
                     Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                    readTime = Integer.valueOf(String.valueOf(task.getResult()));
+                    readTime[0] = Integer.parseInt(String.valueOf(task.getResult().getValue()));
 
                 }
             }
-
         });
 
-
+        return readTime[0];
 
     }
 
@@ -136,7 +135,7 @@ public class AddFragment extends Fragment {
                 // We use a String here, but any type that can be put in a Bundle is supported
                 startDob = bundle.getString("bundleKey");
 
-                getDataFromDatabase(startDob);
+                int readTime = getDataFromDatabase(startDob);
 
                 // Do something with the result...
                 generatePieChart(view,startDob,readTime);
@@ -307,7 +306,7 @@ public class AddFragment extends Fragment {
         //get the data from the list
 
 
-        mPie.data(createDataWithDob(dob, this.readTime));
+        mPie.data(createDataWithDob(dob, readTime));
 
         mPie.title("Your daily reading time");
 

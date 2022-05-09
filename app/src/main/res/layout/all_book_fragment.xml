@@ -15,8 +15,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:marqueeRepeatLimit="marquee_forever"
-        android:text="Today's weather"
-        />
+        android:text="@string/weatherHello" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_book_recycler_view"
@@ -27,7 +26,7 @@
         android:scrollbars="vertical" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/start_workmanager"
+        android:id="@+id/start_work_manager"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/all_book_recycler_view"
@@ -35,5 +34,5 @@
         android:layout_gravity="end|bottom"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="1dp"
-        android:contentDescription="start work manager"/>
+        android:contentDescription="@string/float_action_btn_description"/>
 </RelativeLayout>

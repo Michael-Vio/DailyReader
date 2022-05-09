@@ -13,4 +13,13 @@
     <string name="username_space_error">Username cannot contain whitespaces</string>
     <string name="address_error">Current address cannot be empty</string>
     <string name="gender_error">Please choose a gender</string>
+    <string name="item_book_name">Unknown</string>
+    <string name="set_goal_btn">Set Goal</string>
+    <string name="goal_view">No goal has set.</string>
+    <string name="float_action_btn_description">start work manager</string>
+    <string name="weatherHello">Today\'s weather</string>
+    <string name="add_book_go_back_btn_descp">Go back</string>
+    <string name="welcome_msg">Welcome!</string>
+    <string name="finish_setting_btn">Finish Setting</string>
+    <string name="ok_btn">OK</string>
 </resources>

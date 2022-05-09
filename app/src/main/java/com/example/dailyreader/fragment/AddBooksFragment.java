@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -66,7 +67,9 @@ public class AddBooksFragment extends Fragment{
                     String filepath = currentFiles[position].getAbsolutePath();
                     int length = currentFiles[position].getName().length() - 4;
                     String bookName = currentFiles[position].getName().substring(0, length);
-                    bookViewModel.insert(new Book(bookName, filepath, 0, 0));
+                    List<Integer> readPosition = new ArrayList<>();
+                    readPosition.add(0);
+                    bookViewModel.insert(new Book(bookName, filepath, readPosition, 0));
                     Toast.makeText(getContext(), "Add to the bookshelf successfully", Toast.LENGTH_SHORT).show();
 
                 } else if (currentFiles[position].isDirectory()){

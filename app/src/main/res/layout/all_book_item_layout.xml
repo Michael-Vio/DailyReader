@@ -2,7 +2,6 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="110dp"
@@ -11,7 +10,8 @@
     android:foreground="?selectableItemBackground"
     card_view:cardCornerRadius="12dp"
     card_view:cardElevation="3dp"
-    card_view:contentPadding="4dp">
+    card_view:contentPadding="4dp"
+    android:focusable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -25,13 +25,15 @@
             android:id="@+id/book_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="164dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="208dp"
+            android:layout_marginBottom="8dp"
             android:layout_weight="1"
-            android:text="Unknown"
-            android:textSize="15dp"
+            android:text="@string/item_book_name"
+            android:textSize="15sp"
             card_view:layout_constraintBottom_toTopOf="@+id/goal_view"
-            card_view:layout_constraintEnd_toEndOf="parent" />
+            card_view:layout_constraintEnd_toEndOf="parent"
+            card_view:layout_constraintHorizontal_bias="0.615"
+            card_view:layout_constraintStart_toEndOf="@+id/cover_page" />
 
         <Button
             android:id="@+id/set_goal"
@@ -39,8 +41,8 @@
             android:layout_height="48dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="4dp"
-            android:text="Set Goal"
-            android:textSize="10dp"
+            android:text="@string/set_goal_btn"
+            android:textSize="12sp"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintEnd_toEndOf="parent" />
 
@@ -70,12 +72,12 @@
             android:id="@+id/goal_view"
             android:layout_width="153dp"
             android:layout_height="35dp"
-            android:layout_marginStart="100dp"
-            android:layout_marginBottom="8dp"
-            android:text="No goal has set"
-            android:textSize="12dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/goal_view"
+            android:textSize="12sp"
             card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintStart_toStartOf="parent" />
+            card_view:layout_constraintStart_toEndOf="@+id/cover_page" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

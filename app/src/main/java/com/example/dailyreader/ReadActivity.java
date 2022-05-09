@@ -1,8 +1,6 @@
 package com.example.dailyreader;
 
 
-
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -20,14 +18,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.dailyreader.entity.Book;
 import com.example.dailyreader.viewmodel.BookViewModel;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.CharBuffer;
-import java.nio.charset.StandardCharsets;
+import java.io.RandomAccessFile;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -36,14 +30,13 @@ public class ReadActivity extends AppCompatActivity{
     private ReadPageView readPageView;
     private BookViewModel bookViewModel;
     private Book book;
-    private BufferedReader reader;
-    private final int bufferSize = 10000;
-    private final CharBuffer buffer = CharBuffer.allocate(bufferSize);
-    private int endPosition;
     private PopupWindow popupWindow;
     private GestureDetector gestureDetector;
-    private int finishReadPosition;
+    private List<Integer> finishReadPosition;
     private RecordReadTime recordReadTime;
+    private int startLastPosition;
+    private int positionIndex;
+    private RandomAccessFile reader;
 
 
 
@@ -56,12 +49,7 @@ public class ReadActivity extends AppCompatActivity{
 
         bookViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(BookViewModel.class);
 
-        View.OnTouchListener touchListener = new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return gestureDetector.onTouchEvent(event);
-            }
-        };
+        View.OnTouchListener touchListener = (v, event) -> gestureDetector.onTouchEvent(event);
 
         int bookId= getIntent().getIntExtra("bookInfo", 0);
         CompletableFuture<Book> bookCompletableFuture = bookViewModel.findByIdFuture(bookId);
@@ -74,25 +62,12 @@ public class ReadActivity extends AppCompatActivity{
         readPageView = findViewById(R.id.read_page_view);
         gestureDetector= new GestureDetector(this, new GestureListener());
         readPageView.setOnTouchListener(touchListener);
-        readPageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                showPopupWindow();
-                return false;
-            }
+        readPageView.setOnLongClickListener(v -> {
+            showPopupWindow();
+            return false;
         });
 
-
         loadBook(book.getFilepath());
-        finishReadPosition = book.getReadPosition();
-        if (finishReadPosition >= bufferSize) {
-            int itr = finishReadPosition / bufferSize;
-            int skip = finishReadPosition % bufferSize;
-            locateLastPosition(itr, skip);
-        } else {
-            endPosition = finishReadPosition;
-            loadPage(endPosition, -2);
-        }
     }
 
     @Override
@@ -147,66 +122,46 @@ public class ReadActivity extends AppCompatActivity{
 
         textSizeM.setOnClickListener(v -> readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 20));
 
-
         textSizeL.setOnClickListener(v -> readPageView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 22));
 
         popupWindow.showAsDropDown(findViewById(R.id.read_activity_layout));
     }
 
-    private void loadBook(String book) {
+    private void loadBook(String bookPath) {
+        finishReadPosition = book.getReadPosition();
+        positionIndex = finishReadPosition.size() - 1;
+        startLastPosition = finishReadPosition.get(positionIndex);
+        Toast.makeText(getApplicationContext(),""+startLastPosition,Toast.LENGTH_SHORT).show();
 
         try {
-            InputStream in = new FileInputStream(book);
-            reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-            reader.read(buffer);
+            File book = new File(bookPath);
+            reader = new RandomAccessFile(book, "r");
+
         } catch (IOException e) {
             Toast.makeText(this, "The book does not exist.", Toast.LENGTH_SHORT).show();
         }
-
-        readPageView.setText(buffer);
-    }
-
-    private void loadPage(int position, int limit) {
-        buffer.position(position);
-        if (limit != -2) {
-            buffer.limit(limit);
-        }
-        readPageView.setText(buffer);
+        loadPage(startLastPosition);
 
     }
 
-    private void locateLastPosition(int itr, int skip) {
-
-        if (itr > 0) {
-            for (int i = 0; i < itr; i++) {
-                try {
-                    buffer.clear();
-                    reader.read(buffer);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        endPosition = skip;
-        loadPage(endPosition, -2);
-    }
-
-    private void updateBuffer()
-    {
+    private void loadPage(int position) {
+        StringBuilder onePageText = new StringBuilder();
+        byte[] buffer = new byte[512];
         try {
-            buffer.clear();
-            int readCharNumber;
-            if ((readCharNumber = reader.read(buffer)) != bufferSize) {
-                loadPage(0, readCharNumber);
-            } else {
-                loadPage(0, -2);
+            reader.seek(position);
+            int hasRead;
+            int totalRead = 0;
+            while ((hasRead = reader.read(buffer)) != -1 && totalRead <= 1024) {
+                onePageText.append(new String(buffer,0,hasRead));
+                totalRead += hasRead;
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
 
+        readPageView.setText(onePageText);
+        readPageView.resize();
+    }
 
     class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
@@ -239,24 +194,25 @@ public class ReadActivity extends AppCompatActivity{
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 
             if (e1.getX() - e2.getX() > 50) {
-                finishReadPosition += readPageView.getCharNum();
-                if (finishReadPosition >= new File(book.getFilepath()).length()) {
+                startLastPosition += readPageView.getCharNum();
+                finishReadPosition.add(startLastPosition);
+                positionIndex++;
+                if (finishReadPosition.get(positionIndex) >= new File(book.getFilepath()).length()) {
                     Toast.makeText(getApplicationContext(),"The last page" ,Toast.LENGTH_SHORT).show();
                 } else {
-                    endPosition += readPageView.getCharNum();
-                    if (endPosition >= bufferSize) {
-                        updateBuffer();
-                        endPosition = 0;
-                    }
-                    loadPage(endPosition, -2);
+                    loadPage(startLastPosition);
                 }
 
             }
             if (e2.getX() - e1.getX() > 50) {
-                if (finishReadPosition == 0) {
-                    Toast.makeText(getApplicationContext(), "The first page", Toast.LENGTH_SHORT).show();
+                if(positionIndex == 0) {
+                    Toast.makeText(getApplicationContext(),"The first page" ,Toast.LENGTH_SHORT).show();
+                } else {
+                    finishReadPosition.remove(positionIndex);
+                    positionIndex--;
+                    startLastPosition = finishReadPosition.get(positionIndex);
+                    loadPage(startLastPosition);
                 }
-
             }
 
             return true;
