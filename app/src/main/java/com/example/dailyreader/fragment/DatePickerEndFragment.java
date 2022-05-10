@@ -22,6 +22,7 @@ import com.example.dailyreader.databinding.DatePickerFragmentBinding;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -37,6 +38,7 @@ public class DatePickerEndFragment extends Fragment {
     public int startYear;
 
     public String startDob;
+    public String dobAfterChange1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,22 +82,53 @@ public class DatePickerEndFragment extends Fragment {
                 String dobAfterChange = changeDobFormat(day1,month1,year1);
 
                 Toast.makeText(getContext(), dobAfterChange, Toast.LENGTH_LONG).show();
+                Log.d("dobAfterChange", dobAfterChange);
+                // add endDate into bundle
+                addStringToBundle(dobAfterChange);
 
-
-                sendStringEndDob(dobAfterChange);
             }
         });
 
 
         return view;
     }
+    public void addStringToBundle(String string){
+
+        Log.d("addStringToBundle", string);
+        getParentFragmentManager().setFragmentResultListener("requestKey1", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
+
+                Bundle result1 = new Bundle();
+                bundle.getStringArrayList("bundleKey1").add(string);
+
+                Log.d("bundle0", bundle.getStringArrayList("bundleKey1").get(0));
+                Log.d("bundle1", bundle.getStringArrayList("bundleKey1").get(1));
+
+                result1.putStringArrayList("bundleKey2",bundle.getStringArrayList("bundleKey1"));
+                getParentFragmentManager().setFragmentResult("requestKey2", result1);
+
+            }
+        });
+    }
 
     public void sendStringEndDob(String dob){
 
         // send dob to another fragment
+
         Bundle result = new Bundle();
         result.putString("bundleKey1", dob);
         getParentFragmentManager().setFragmentResult("requestKey1", result);
+
+
+    }
+
+    public void sendStringStartDob(String dob){
+
+        // send dob to another fragment
+        Bundle result = new Bundle();
+        result.putString("bundleKey2", dob);
+        getParentFragmentManager().setFragmentResult("requestKey2", result);
 
     }
 
@@ -108,15 +141,29 @@ public class DatePickerEndFragment extends Fragment {
             public void onFragmentResult(@NonNull String key, @NonNull Bundle bundle) {
                 // We use a String here, but any type that can be put in a Bundle is supported
 
-                startDob = bundle.getString("bundleKey");
-                Log.d("startDob1", String.valueOf(startDob));
+                startDob = bundle.getString("bundleKey"); // useful startDob
+                sendStringStartDob(startDob);
 
                 Date startDob1 = changeStringToDate(startDob);
                 startDob1 = add1daysToDate(startDob1);
-                Log.d("startDob1", String.valueOf(startDob1));
+                //Log.d("startDob1", String.valueOf(startDob1));
 
                 Date endDate1 = add7daysToDate(startDob1);
-                Log.d("endDate1", String.valueOf(endDate1));
+                String endDate2 = changeDateToString(endDate1); // useful endDate2
+
+                Log.d("startDob0", startDob);
+                //Log.d("dobAfterChange1", dobAfterChange1);
+
+                ArrayList<String> arrayList = new ArrayList<String>();
+                arrayList.add(startDob);
+                //arrayList.add(endDate2);
+
+                Bundle result1 = new Bundle();
+                result1.putStringArrayList("bundleKey1", arrayList);
+                getParentFragmentManager().setFragmentResult("requestKey1", result1);
+
+
+
                 setMinAndMaxDate(simpleDatePicker,startDob1,endDate1 );
 
                 //setMinAndMaxDate(simpleDatePicker)
@@ -125,6 +172,25 @@ public class DatePickerEndFragment extends Fragment {
             }
         });
         return startDob;
+    }
+
+    public void sendListsDob(String s, String e){
+
+        // send dob to another fragment
+        String arr1[] = {s,e};
+
+        Bundle result = new Bundle();
+        result.putStringArray("bundleKey1",arr1);
+        //result.putString("bundleKey", dob);
+        getParentFragmentManager().setFragmentResult("requestKey1", result);
+
+    }
+
+    public String changeDateToString(Date date){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return sdf.format(date);
+
     }
 
     public Date changeStringToDate(String str){
