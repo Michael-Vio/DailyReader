@@ -197,7 +197,7 @@ public class ReportFragment extends Fragment {
         } else {
             generatePieChart(view);
             chartView.setChart(pie);
-        }
+        }x
     }*/
 
     public List<DataEntry> createData()
