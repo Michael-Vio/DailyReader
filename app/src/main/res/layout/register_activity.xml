@@ -107,32 +107,58 @@
                     </com.google.android.material.textfield.TextInputEditText>
 
                 </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/address_error"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Current Address"
-                    android:paddingBottom="10dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/address_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="text">
-
-                    </com.google.android.material.textfield.TextInputEditText>
-
-                </com.google.android.material.textfield.TextInputLayout>
-
+                
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:text="Gender:"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginTop="10dp"/>
                 <Spinner
                     android:id="@+id/gender_input"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:paddingBottom="15dp">
+                    android:layout_width="203dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="36dp"
+                    android:layout_marginTop="10dp"/>
 
-                </Spinner>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Birthday:"
+                        android:textSize="16sp"
+                        android:layout_marginLeft="14dp"/>
+
+                    <Button
+                        android:layout_height="wrap_content"
+                        android:layout_width="210dp"
+                        android:id="@+id/date_picker"
+                        android:text="01 Mar 2022"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        style="?android:spinnerStyle"
+                        android:onClick="openDatePicker"
+                        android:layout_marginLeft="20dp"
+                        />
+
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/date_picker_error"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reader"
+                    android:textColor="@color/red"
+                    android:visibility="invisible"
+                    android:layout_marginLeft="15dp"/>
 
             </LinearLayout>
 

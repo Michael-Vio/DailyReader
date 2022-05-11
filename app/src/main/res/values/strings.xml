@@ -11,8 +11,9 @@
     <string name="repeat_password_error">Two passwords must be the same</string>
     <string name="username_empty_error">Username cannot be empty</string>
     <string name="username_space_error">Username cannot contain whitespaces</string>
-    <string name="address_error">Current address cannot be empty</string>
-    <string name="gender_error">Please choose a gender</string>
+    <string name="birthday_after_error">Birthday cannot be later than today</string>
+    <string name="birthday_empty_error">Please choose a date</string>
+    <string name="gender_error">Cant be empty</string>
     <string name="item_book_name">Unknown</string>
     <string name="set_goal_btn">Set Goal</string>
     <string name="goal_view">No goal has set.</string>

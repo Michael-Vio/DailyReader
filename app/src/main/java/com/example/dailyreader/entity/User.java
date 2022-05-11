@@ -21,14 +21,14 @@ public class User {
     private String gender;
 
     @NonNull
-    @ColumnInfo(name = "Address")
-    private String address;
+    @ColumnInfo(name = "Birthday")
+    private String birthday;
 
-    public User(@NonNull String user_email, @NonNull String username, @NonNull String gender, @NonNull String address){
+    public User(@NonNull String user_email, @NonNull String username, @NonNull String gender, @NonNull String birthday){
         this.user_email = user_email;
         this.username = username;
         this.gender = gender;
-        this.address = address;
+        this.birthday = birthday;
     }
 
     @NonNull
@@ -40,10 +40,10 @@ public class User {
     public void setUsername(@NonNull String username){this.username = username;}
     @NonNull
     public String getGender(){return gender;}
-    public void setGender(@NonNull String gender){this.username = gender;}
+    public void setGender(@NonNull String gender){this.gender = gender;}
     @NonNull
-    public String getAddress(){return address;}
-    public void setAddress(@NonNull String address){this.username = address;}
+    public String getBirthday(){return birthday;}
+    public void setBirthday(@NonNull String birthday){this.birthday = birthday;}
 
 
 }

@@ -1,11 +1,15 @@
 package com.example.dailyreader;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,13 +20,19 @@ import com.example.dailyreader.databinding.RegisterActivityBinding;
 import com.example.dailyreader.entity.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -31,6 +41,13 @@ public class RegisterActivity extends AppCompatActivity {
     private RegisterActivityBinding binding;
     private FirebaseAuth mAuth;
     private DatabaseReference reference;
+    private Button dateButton;
+    private DatePickerDialog datePickerDialog;
+    private String date;
+    private String todayDate;
+    private Date datePicker;
+    private Date currentDate;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +81,10 @@ public class RegisterActivity extends AppCompatActivity {
         binding.submitButton.setOnClickListener(v ->{
             submitCheck();
         });
+
+        initDatePicker();
+        dateButton = findViewById(R.id.date_picker);
+        dateButton.setText(todayDate());
 
 
     }
@@ -158,17 +179,6 @@ public class RegisterActivity extends AppCompatActivity {
             validUsername = true;
         }
 
-        boolean validAddress = false;
-        String addressInput = binding.addressInput.getText().toString();
-        // Empty address input
-        if (addressInput.isEmpty()){
-            binding.addressError.setError(getResources().getString(R.string.address_error));
-            validAddress = false;
-        }
-        else{
-            binding.addressError.setErrorEnabled(false);
-            validAddress = true;
-        }
 
         boolean validGender = false;
         String genderInput = binding.genderInput.getSelectedItem().toString();
@@ -184,9 +194,30 @@ public class RegisterActivity extends AppCompatActivity {
             validGender = true;
         }
 
-        if (validEmail && validAddress && validPassword && validUsername && validGender){
+        boolean validBirthday = false;
+        SimpleDateFormat sdf = new SimpleDateFormat("d MMM yyyy");
+        try {
+            datePicker = sdf.parse(dateButton.getText().toString());
+            currentDate = sdf.parse(todayDate);
+        }catch(ParseException e){
+            e.printStackTrace();
+        }
+        if (dateButton.getText().toString().equals(todayDate)){
+            binding.datePickerError.setText(getResources().getString(R.string.birthday_empty_error));
+            binding.datePickerError.setVisibility(View.VISIBLE);
+            validBirthday = false;
+        }else if (datePicker.after(currentDate)){
+            binding.datePickerError.setText(getResources().getString(R.string.birthday_after_error));
+            binding.datePickerError.setVisibility(View.VISIBLE);
+            validBirthday = false;
+        }else{
+            binding.datePickerError.setVisibility((View.INVISIBLE));
+            validBirthday = true;
+        }
+
+        if (validEmail && validBirthday && validPassword && validUsername && validGender){
             binding.progressBar.setVisibility(View.VISIBLE);
-            User user_info = new User(emailInput, usernameInput, genderInput, addressInput);
+            User user_info = new User(emailInput, usernameInput, genderInput, dateButton.getText().toString());
             mAuth.createUserWithEmailAndPassword(emailInput, passwordInput)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -212,5 +243,72 @@ public class RegisterActivity extends AppCompatActivity {
                     });
         }
 
+    }
+
+    private void initDatePicker(){
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int day) {
+                month = month + 1;
+                date = makeDateString(day, month, year);
+                dateButton.setText(date);
+            }
+        };
+
+        Calendar calendar = Calendar.getInstance() ;
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        int style = AlertDialog.THEME_DEVICE_DEFAULT_LIGHT;
+
+        datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month ,day);
+    }
+
+    private String todayDate(){
+        Calendar calendar = Calendar.getInstance() ;
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        month = month + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        todayDate = day+ " "+ getMonthFormat(month) +" "+ year;
+        return makeDateString(day,month,year);
+    }
+
+    private String makeDateString(int day, int month, int year){
+        return day+ " "+ getMonthFormat(month) +" "+ year;
+    }
+
+    private String getMonthFormat(int month){
+        if (month == 1)
+            return "Jan";
+        if (month == 2)
+            return "Feb";
+        if (month == 3)
+            return "Mar";
+        if (month == 4)
+            return "Apr";
+        if (month == 5)
+            return "May";
+        if (month == 6)
+            return "Jun";
+        if (month == 7)
+            return "Jul";
+        if (month == 8)
+            return "Aug";
+        if (month == 9)
+            return "Sep";
+        if (month == 10)
+            return "Oct";
+        if (month == 11)
+            return "Nov";
+        if (month == 12)
+            return "Dec";
+
+        return "Jan";
+    }
+
+    public void openDatePicker(View view){
+        datePickerDialog.show();
     }
 }

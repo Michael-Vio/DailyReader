@@ -10,4 +10,5 @@
     <color name="original">#BEA592</color>
     <color name="popup_window_color">#F9ECC3</color>
     <color name="orange">#FF7A22</color>
+    <color name="red">#E53935</color>
 </resources>
