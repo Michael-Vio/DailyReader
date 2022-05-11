@@ -2,24 +2,32 @@ package com.example.dailyreader;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.mapbox.geojson.Point;
-import com.mapbox.maps.CameraOptions;
-import com.mapbox.maps.MapView;
-import com.mapbox.maps.Style;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapActivity extends AppCompatActivity {
-    private MapView mapView;
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.map_fragment);
-        //lat and long are hardcoded here to Monash Caulfield but could be provided at run time
-        final Point point = Point.fromLngLat(145.045837, -37.876823 );
 
-        mapView = findViewById(R.id.mapView);
+        // Set the layout file as the content view.
+        setContentView(R.layout.map_fragment);
+
+        // Get a handle to the fragment and register the callback.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.maps);
+        //lat and long are hardcoded here to Monash Caulfield but could be provided at run time
+//        final Point point = Point.fromLngLat(145.045837, -37.876823 );
+
+        mapFragment.getMapAsync(this);
+
 
 //        mapView.addMarker(new MarkerOptions()
 //                .position(new LatLng(48.85819, 2.29458))
@@ -33,13 +41,22 @@ public class MapActivity extends AppCompatActivity {
 //            }
 //        }
 //)
+//
+//        CameraOptions cameraPosition = new CameraOptions.Builder()
+//                .zoom(13.0)
+//                .center(point)
+//                .build();
+//
+//        mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
+//        mapView.getMapboxMap().setCamera(cameraPosition); }
 
-        CameraOptions cameraPosition = new CameraOptions.Builder()
-                .zoom(13.0)
-                .center(point)
-                .build();
+    }
 
-        mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
-        mapView.getMapboxMap().setCamera(cameraPosition); }
-
+    // Get a handle to the GoogleMap object and display marker.
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        googleMap.addMarker(new MarkerOptions()
+                .position(new LatLng(-37.907803, 145.133957))
+                .title("Monash Clayton"));
+    }
 }
