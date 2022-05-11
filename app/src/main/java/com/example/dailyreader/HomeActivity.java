@@ -2,6 +2,7 @@ package com.example.dailyreader;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -9,7 +10,12 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,12 +53,12 @@ public class HomeActivity extends AppCompatActivity {
                 R.id.nav_map_fragment,
                 R.id.nav_report_fragment,
                 R.id.nav_weather_fragment,
-                R.id.nav_sync_fragment)
+                R.id.nav_sync_fragment,
+                R.id.nav_search_fragment)
                 .setOpenableLayout(binding.drawerLayout)
                 .build();
         FragmentManager fragmentManager= getSupportFragmentManager();
-        NavHostFragment navHostFragment = (NavHostFragment)
-                fragmentManager.findFragmentById(R.id.nav_host_fragment);
+        NavHostFragment navHostFragment = (NavHostFragment) fragmentManager.findFragmentById(R.id.nav_host_fragment);
         NavController navController = navHostFragment.getNavController();
 
         NavigationUI.setupWithNavController(binding.navView, navController);
@@ -81,4 +87,6 @@ public class HomeActivity extends AppCompatActivity {
                 mAppBarConfiguration);
 
     }
+
+
 }

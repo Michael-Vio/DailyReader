@@ -32,5 +32,9 @@
         android:id="@+id/nav_sync_fragment"
         android:name="com.example.dailyreader.fragment.SyncFragment"
         android:label="Synchronize" />
+    <fragment
+        android:id="@+id/nav_search_fragment"
+        android:name="com.example.dailyreader.fragment.SearchFragment"
+        android:label="Search" />
 
 </navigation>

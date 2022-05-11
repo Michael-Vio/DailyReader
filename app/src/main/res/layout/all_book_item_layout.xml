@@ -66,7 +66,7 @@
             android:layout_marginBottom="4dp"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toStartOf="parent"
-            card_view:srcCompat="@drawable/side_nav_bar" />
+            card_view:srcCompat="@drawable/read_book_image" />
 
         <TextView
             android:id="@+id/goal_view"

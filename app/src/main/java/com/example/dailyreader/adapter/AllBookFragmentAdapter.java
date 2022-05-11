@@ -57,8 +57,7 @@ public class AllBookFragmentAdapter extends RecyclerView.Adapter<AllBookFragment
 
         holder.itemView.setTag(position);
 
-
-        holder.coverPage.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), ReadActivity.class);
             intent.putExtra("bookInfo", book.getBid());
             v.getContext().startActivity(intent);

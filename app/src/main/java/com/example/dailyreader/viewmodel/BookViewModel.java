@@ -7,10 +7,13 @@ import android.os.Build;
 import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.example.dailyreader.entity.Book;
 import com.example.dailyreader.repository.BookRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -18,18 +21,22 @@ import java.util.concurrent.CompletableFuture;
 public class BookViewModel extends AndroidViewModel {
     private final BookRepository bRepository;
     private final LiveData<List<Book>> allBooks;
+
     public BookViewModel (Application application) {
         super(application);
         bRepository = new BookRepository(application);
         allBooks = bRepository.getAllBooks();
     }
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     public CompletableFuture<Book> findByIdFuture(final int bookId){
         return bRepository.findByIdFuture(bookId);
     }
+
+    public CompletableFuture<Book> findByNameFuture(final String bookName){
+        return bRepository.findByNameFuture(bookName);
+    }
+
     public LiveData<List<Book>> getAllBooks() {
 
         return allBooks;
@@ -55,8 +62,6 @@ public class BookViewModel extends AndroidViewModel {
 
         bRepository.updateBook(book);
     }
-
-
 }
 
 

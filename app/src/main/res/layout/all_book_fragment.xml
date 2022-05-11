@@ -20,9 +20,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_book_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="621dp"
+        android:layout_height="571dp"
         android:layout_below="@+id/weatherHello"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="9dp"
         android:scrollbars="vertical" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

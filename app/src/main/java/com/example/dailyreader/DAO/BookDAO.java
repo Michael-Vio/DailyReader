@@ -19,6 +19,8 @@ public interface BookDAO {
     List<Book> getBookList();
     @Query("SELECT * FROM book WHERE bid = :bookId LIMIT 1")
     Book findById(int bookId);
+    @Query("SELECT * FROM book WHERE book_name = :bookName LIMIT 1")
+    Book findByName(String bookName);
     @Insert
     void insert(Book book);
     @Delete

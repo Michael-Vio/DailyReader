@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import com.example.dailyreader.R;
-import com.example.dailyreader.adapter.AddBooksFragmentAdapter;
 import com.example.dailyreader.databinding.AddBooksFragmentBinding;
 import com.example.dailyreader.entity.Book;
 import com.example.dailyreader.viewmodel.BookViewModel;
@@ -14,6 +13,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.widget.AdapterView;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 
 public class AddBooksFragment extends Fragment{
@@ -36,8 +38,7 @@ public class AddBooksFragment extends Fragment{
     public AddBooksFragment () {}
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         addBooksBinding = AddBooksFragmentBinding.inflate(inflater, container, false);
         View view = addBooksBinding.getRoot();
@@ -69,8 +70,21 @@ public class AddBooksFragment extends Fragment{
                     String bookName = currentFiles[position].getName().substring(0, length);
                     List<Integer> readPosition = new ArrayList<>();
                     readPosition.add(0);
-                    bookViewModel.insert(new Book(bookName, filepath, readPosition, 0));
-                    Toast.makeText(getContext(), "Add to the bookshelf successfully", Toast.LENGTH_SHORT).show();
+                    CompletableFuture<Book> result = bookViewModel.findByNameFuture(bookName);
+                    Book book = null;
+                    try {
+                        book = result.get();
+                    } catch (ExecutionException | InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (book != null) {
+                        Toast.makeText(getContext(), "Book exists", Toast.LENGTH_SHORT).show();
+                    } else {
+                        bookViewModel.insert(new Book(bookName, filepath, readPosition, 0));
+                        Toast.makeText(getContext(), "Add to the bookshelf successfully", Toast.LENGTH_SHORT).show();
+                    }
+
 
                 } else if (currentFiles[position].isDirectory()){
                     File[] tmpFiles = currentFiles[position].listFiles();
@@ -115,7 +129,7 @@ public class AddBooksFragment extends Fragment{
             items.add(item);
         }
 
-        AddBooksFragmentAdapter adapter = new AddBooksFragmentAdapter(getContext(), items, R.layout.file_item_layout, new String[]{"image", "filename"}, new int[]{R.id.image, R.id.filename});
+        SimpleAdapter adapter = new SimpleAdapter(getContext(), items, R.layout.file_item_layout, new String[]{"image", "filename"}, new int[]{R.id.image, R.id.filename});
         addBooksBinding.folderList.setAdapter(adapter);
         String path = "You are at: " + parentFolder.getAbsolutePath();
         addBooksBinding.path.setText(path);

@@ -131,7 +131,6 @@ public class ReadActivity extends AppCompatActivity{
         finishReadPosition = book.getReadPosition();
         positionIndex = finishReadPosition.size() - 1;
         startLastPosition = finishReadPosition.get(positionIndex);
-        Toast.makeText(getApplicationContext(),""+startLastPosition,Toast.LENGTH_SHORT).show();
 
         try {
             File book = new File(bookPath);

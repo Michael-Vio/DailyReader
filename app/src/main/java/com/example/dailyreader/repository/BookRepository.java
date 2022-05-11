@@ -88,6 +88,15 @@ public class BookRepository {
         }, BookDatabase.databaseWriteExecutor);
     }
 
+    public CompletableFuture<Book> findByNameFuture(final String bookName) {
+        return CompletableFuture.supplyAsync(new Supplier<Book>() {
+            @Override
+            public Book get() {
+                return bookDao.findByName(bookName);
+            }
+        }, BookDatabase.databaseWriteExecutor);
+    }
+
 }
 
 

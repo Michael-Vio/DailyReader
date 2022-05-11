@@ -24,15 +24,14 @@
             android:id="@+id/nav_report_fragment"
             android:title="Report" />
         <item
+            android:id="@+id/nav_search_fragment"
+            android:title="Search" />
+        <item
             android:id="@+id/nav_logout_fragment"
             android:title="Logout" />
     </group>
 
-    <item
-        android:id="@+id/app_bar_search"
-        android:icon="@drawable/ic_search"
-        android:title="Search"
-        app:actionViewClass="android.widget.SearchView" />
+
 
 </menu>
 
