@@ -260,7 +260,7 @@ public class RegisterActivity extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        int style = AlertDialog.THEME_DEVICE_DEFAULT_LIGHT;
+        int style = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
 
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month ,day);
     }
