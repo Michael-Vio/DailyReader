@@ -23,9 +23,12 @@
     <string name="welcome_msg">Welcome!</string>
     <string name="finish_setting_btn">Finish Setting</string>
     <string name="ok_btn">OK</string>
-    <string name="event_form">Event Form</string>
-    <string name="event_title">Title: Reading Book on DailyReader</string>
-    <string name="event_location">Location: Anywhere</string>
-    <string name="event_description">Description: None</string>
+    <string name="event_form">Calendar Event</string>
+    <string name="event_title">Title: </string>
+    <string name="event_location">Location: </string>
+    <string name="event_description">Description: </string>
     <string name="syn_btn">SYN NOW</string>
+    <string name="event_title_content">Reading Book on DailyReader</string>
+    <string name="event_location_content">Anywhere</string>
+    <string name="event_description_content">None</string>
 </resources>

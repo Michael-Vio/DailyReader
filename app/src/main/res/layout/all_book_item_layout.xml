@@ -30,6 +30,7 @@
             android:layout_weight="1"
             android:text="@string/item_book_name"
             android:textSize="15sp"
+            android:textColor="@color/black"
             card_view:layout_constraintBottom_toTopOf="@+id/goal_view"
             card_view:layout_constraintEnd_toEndOf="parent"
             card_view:layout_constraintHorizontal_bias="0.615"
@@ -76,6 +77,7 @@
             android:layout_marginBottom="16dp"
             android:text="@string/goal_view"
             android:textSize="12sp"
+            android:textColor="@color/black"
             card_view:layout_constraintBottom_toBottomOf="parent"
             card_view:layout_constraintStart_toEndOf="@+id/cover_page" />
 

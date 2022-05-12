@@ -47,22 +47,22 @@ public class SyncFragment extends Fragment {
         }
         // set the reading goals to event description if they exist
         if (!readGoals.toString().isEmpty()) {
-            syncBinding.eventDescription.setText(readGoals.toString());
+            syncBinding.eventDescriptionContent.setText(readGoals.toString());
         }
 
 
         syncBinding.synBtn.setOnClickListener(v -> {
 //                Add some checking Inside the addEvent button's onClickListener to ensure that the title,
 //            location, and description edittexts are not empty. Otherwise, show an error Toast message.
-            if (!syncBinding.eventDescription.getText().equals("Description: None"))  {
+            if (!syncBinding.eventDescriptionContent.getText().equals("None"))  {
 //                    Initialize the Android calendar Intent.
                 Intent intent = new Intent(Intent.ACTION_INSERT);
                 intent.setData(CalendarContract.Events.CONTENT_URI);
 
 //                    Pass the title, location, and description values into the intent using PutExtra.
-                intent.putExtra(CalendarContract.Events.TITLE, syncBinding.eventTitle.getText());
-                intent.putExtra(CalendarContract.Events.EVENT_LOCATION, syncBinding.eventLocation.getText());
-                intent.putExtra(CalendarContract.Events.DESCRIPTION, syncBinding.eventDescription.getText());
+                intent.putExtra(CalendarContract.Events.TITLE, syncBinding.eventTitleContent.getText());
+                intent.putExtra(CalendarContract.Events.EVENT_LOCATION, syncBinding.eventLocationContent.getText());
+                intent.putExtra(CalendarContract.Events.DESCRIPTION, syncBinding.eventDescriptionContent.getText());
 
 //                    Set the event type so that it will be able available all day without start and end time.
                 intent.putExtra(CalendarContract.Events.ALL_DAY, true);
