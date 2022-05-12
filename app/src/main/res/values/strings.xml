@@ -32,4 +32,6 @@
     <string name="event_location_content">Anywhere</string>
     <string name="event_description_content">None</string>
     <string name="map_api_key" translatable="false">AIzaSyDmInog1e3KsG6QFEX_FEpPLDLHrP-R9Jw</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

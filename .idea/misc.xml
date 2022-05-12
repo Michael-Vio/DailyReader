@@ -45,8 +45,11 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_map.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_read.xml" value="0.1405775075987842" />
+        <entry key="app/src/main/res/layout/all_book_fragment.xml" value="0.15443840579710144" />
+        <entry key="app/src/main/res/layout/all_book_item_layout.xml" value="0.15443840579710144" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.15443840579710144" />
         <entry key="app/src/main/res/layout/item_layout.xml" value="0.26856884057971014" />
         <entry key="app/src/main/res/layout/logout_fragment.xml" value="0.1526268115942029" />
         <entry key="app/src/main/res/layout/map_fragment.xml" value="0.1526268115942029" />
