@@ -244,13 +244,15 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
     }
-
+    // initiate date picker
     private void initDatePicker(){
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 month = month + 1;
+                // update local variable string date
                 date = makeDateString(day, month, year);
+                // set the text for birthday button from date picker
                 dateButton.setText(date);
             }
         };
@@ -260,11 +262,12 @@ public class RegisterActivity extends AppCompatActivity {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        int style = AlertDialog.THEME_DEVICE_DEFAULT_LIGHT;
-
+        int style = AlertDialog.THEME_DEVICE_DEFAULT_DARK;
+        // initiate date picker
         datePickerDialog = new DatePickerDialog(this, style, dateSetListener, year, month ,day);
     }
 
+    // Get the date of today to show on birthday button
     private String todayDate(){
         Calendar calendar = Calendar.getInstance() ;
         int year = calendar.get(Calendar.YEAR);
@@ -279,6 +282,7 @@ public class RegisterActivity extends AppCompatActivity {
         return day+ " "+ getMonthFormat(month) +" "+ year;
     }
 
+    // Convert month from e.g. 01 to Jan
     private String getMonthFormat(int month){
         if (month == 1)
             return "Jan";

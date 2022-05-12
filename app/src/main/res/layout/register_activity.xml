@@ -40,7 +40,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email Address"
-                    android:paddingBottom="10dp">
+                    android:paddingBottom="15dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email_input"
@@ -58,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Password"
-                    android:paddingBottom="10dp"
+                    android:paddingBottom="15dp"
                     app:endIconMode="password_toggle">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -77,7 +77,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Repeat Password"
-                    android:paddingBottom="10dp"
+                    android:paddingBottom="15dp"
                     app:endIconMode="password_toggle">
 
                     <com.google.android.material.textfield.TextInputEditText
