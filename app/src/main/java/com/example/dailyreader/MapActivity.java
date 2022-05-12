@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -55,8 +56,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     // Get a handle to the GoogleMap object and display marker.
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
+        // Add a marker in Monash Clayton, Australia,
+        // and move the map's camera to the same location.
+        LatLng monash = new LatLng(-37.907803, 145.133957);
         googleMap.addMarker(new MarkerOptions()
-                .position(new LatLng(-37.907803, 145.133957))
+                .position(monash)
                 .title("Monash Clayton"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(monash));
     }
+
+
+
 }

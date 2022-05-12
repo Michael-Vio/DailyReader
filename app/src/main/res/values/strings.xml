@@ -31,4 +31,5 @@
     <string name="event_title_content">Reading Book on DailyReader</string>
     <string name="event_location_content">Anywhere</string>
     <string name="event_description_content">None</string>
+    <string name="map_api_key" translatable="false">AIzaSyDmInog1e3KsG6QFEX_FEpPLDLHrP-R9Jw</string>
 </resources>
