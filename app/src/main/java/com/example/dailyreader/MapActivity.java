@@ -12,7 +12,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback{
+import java.util.Vector;
+
+public class MapActivity extends AppCompatActivity
+        implements OnMapReadyCallback{
+
+    private GoogleMap mMap;
+    MarkerOptions marker;
+    LatLng centerLoaction;
+    Vector<MarkerOptions> markerOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,20 +59,45 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 //        mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
 //        mapView.getMapboxMap().setCamera(cameraPosition); }
 
+        centerLoaction = new LatLng(-37.914077628933796, 145.13362531362912);
+
+//        marker = new MarkerOptions().title("Monash Clayton Library!")
+//                .position(new LatLng(-37.92774565018945, 145.11770682897463))
+//                .snippet("Open duering: 10:00 - 20:30"); -37.914314629905554, 145.13507370653124
+
+        markerOptions = new Vector<>();
+
+        markerOptions.add(new MarkerOptions().title("Monash Clayton Library!")
+                .position(new LatLng(-37.92774565018945, 145.11770682897463))
+                .snippet("Open duering: 10:00 - 20:30"));
+
+        markerOptions.add(new MarkerOptions().title("Sir Louis Matheson Library!")
+                .position(new LatLng(-37.912858612729295, 145.1342749559564))
+                .snippet("Open duering: 10:00 - 20:30"));
+
+        markerOptions.add(new MarkerOptions().title("Law Library!")
+                .position(new LatLng(-37.914314629905554, 145.13507370653124))
+                .snippet("Open duering: 10:00 - 20:30"));
+
     }
 
     // Get a handle to the GoogleMap object and display marker.
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
         // Add a marker in Monash Clayton, Australia,
         // and move the map's camera to the same location.
-        LatLng monash = new LatLng(-37.907803, 145.133957);
-        googleMap.addMarker(new MarkerOptions()
-                .position(monash)
-                .title("Monash Clayton"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(monash));
-    }
+//        LatLng monash = new LatLng(-37.907803, 145.133957);
+//        googleMap.addMarker(new MarkerOptions()
+//                .position(monash)
+//                .title("Monash Clayton"));
 
+        for (MarkerOptions mark : markerOptions){
+            mMap.addMarker(mark);
+        }
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centerLoaction, 12));
+    }
 
 
 }
