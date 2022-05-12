@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Log out successfully!"
+        android:text="Are you sure to log out?"
         android:textSize="20sp" />
     <TextView
         android:layout_width="wrap_content"
@@ -23,6 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Back to Login Screen"/>
+        android:text="Yes, Go back to Login Screen"/>
 
 </LinearLayout>
