@@ -49,7 +49,6 @@ public class MapActivity extends AppCompatActivity
         //lat and long are hardcoded here to Monash Caulfield but could be provided at run time
 //        final Point point = Point.fromLngLat(145.045837, -37.876823 );
 
-        assert mapFragment != null;
         mapFragment.getMapAsync(this);
         Intent intent = getIntent();
         double[] address = intent.getDoubleArrayExtra("address");
@@ -71,61 +70,60 @@ public class MapActivity extends AppCompatActivity
             mMap.addMarker(mark);
         }
 
-//        OkHttpClient client = new OkHttpClient().newBuilder().build();
-//        StringBuilder stringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?");
-//        stringBuilder.append("input=library");
-//        stringBuilder.append("&inputtype=textquery");
-//        stringBuilder.append("&locationbias=circle%3A2000%40" + currentLocation.latitude + "%2C" + currentLocation.longitude);
-//        stringBuilder.append("&fields=formatted_address%2Cname%2Copening_hours%2Cgeometry");
-//        stringBuilder.append("&key=" + getResources().getString(R.string.map_api_key));
-//
-//        Request request = new Request.Builder()
-//                .url(stringBuilder.toString())
-//                .method("GET", null)
-//                .build();
-//        client.newCall(request).enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                if (response.isSuccessful()) {
-//                    String theResponse = response.body().string();
-//
-//                    MapActivity.this.runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Log.d("ms", theResponse);
-//                            try {
-//                                JSONObject jsonObject = null;
-//                                jsonObject = new JSONObject(theResponse);
-//
-//                                JSONArray jsonArray = jsonObject.getJSONArray("results");
-//
-//                                for (int i = 0; i < jsonArray.length(); i++) {
-//                                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-//                                    JSONObject getLocation = jsonObject1.getJSONObject("geometry").getJSONObject("location");
-//
-//                                    String latitude = getLocation.getString("lat");
-//                                    String longitude = getLocation.getString("lng");
-//
-//                                    JSONObject getName = jsonArray.getJSONObject(i);
-//                                    String name = getName.getString("name");
-//
-//                                    LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
-//                                    mMap.addMarker(new MarkerOptions().title(name).position(latLng));
-//                                }
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    });
-//
-//                }
-//            }
-//        });
+        OkHttpClient client = new OkHttpClient().newBuilder().build();
+        StringBuilder stringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        stringBuilder.append("&location=" + currentLocation.latitude + "%2C" + currentLocation.longitude);
+        stringBuilder.append("&radius=5000");
+        stringBuilder.append("&type=library");
+        stringBuilder.append("&key=" + getResources().getString(R.string.map_api_key));
+
+        Request request = new Request.Builder()
+                .url(stringBuilder.toString())
+                .method("GET", null)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String theResponse = response.body().string();
+
+                    MapActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("ms", theResponse);
+                            try {
+                                JSONObject jsonObject = null;
+                                jsonObject = new JSONObject(theResponse);
+
+                                JSONArray jsonArray = jsonObject.getJSONArray("results");
+
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                    JSONObject getLocation = jsonObject1.getJSONObject("geometry").getJSONObject("location");
+
+                                    String latitude = getLocation.getString("lat");
+                                    String longitude = getLocation.getString("lng");
+
+                                    JSONObject getName = jsonArray.getJSONObject(i);
+                                    String name = getName.getString("name");
+
+                                    LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+                                    mMap.addMarker(new MarkerOptions().title(name).position(latLng));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                }
+            }
+        });
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
     }
