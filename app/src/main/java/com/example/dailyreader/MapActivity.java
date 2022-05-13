@@ -1,10 +1,12 @@
 package com.example.dailyreader;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -12,15 +14,27 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Vector;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MapActivity extends AppCompatActivity
         implements OnMapReadyCallback{
 
     private GoogleMap mMap;
     MarkerOptions marker;
-    LatLng centerLoaction;
+    LatLng currentLocation;
     Vector<MarkerOptions> markerOptions;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,49 +49,14 @@ public class MapActivity extends AppCompatActivity
         //lat and long are hardcoded here to Monash Caulfield but could be provided at run time
 //        final Point point = Point.fromLngLat(145.045837, -37.876823 );
 
+        assert mapFragment != null;
         mapFragment.getMapAsync(this);
-
-
-//        mapView.addMarker(new MarkerOptions()
-//                .position(new LatLng(48.85819, 2.29458))
-//                .title("Eiffel Tower"));
-
-//        mapView?.getMapboxMap()?.loadStyleUri(
-//                Style.MAPBOX_STREETS,
-//                object : Style.OnStyleLoaded {
-//            override fun onStyleLoaded(style: Style) {
-//                addAnnotationToMap()
-//            }
-//        }
-//)
-//
-//        CameraOptions cameraPosition = new CameraOptions.Builder()
-//                .zoom(13.0)
-//                .center(point)
-//                .build();
-//
-//        mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS);
-//        mapView.getMapboxMap().setCamera(cameraPosition); }
-
-        centerLoaction = new LatLng(-37.914077628933796, 145.13362531362912);
-
-//        marker = new MarkerOptions().title("Monash Clayton Library!")
-//                .position(new LatLng(-37.92774565018945, 145.11770682897463))
-//                .snippet("Open duering: 10:00 - 20:30"); -37.914314629905554, 145.13507370653124
-
+        Intent intent = getIntent();
+        double[] address = intent.getDoubleArrayExtra("address");
+        currentLocation = new LatLng(address[0], address[1]);
         markerOptions = new Vector<>();
+        markerOptions.add(new MarkerOptions().title("Your location").position(currentLocation));
 
-        markerOptions.add(new MarkerOptions().title("Monash Clayton Library!")
-                .position(new LatLng(-37.92774565018945, 145.11770682897463))
-                .snippet("Open duering: 10:00 - 20:30"));
-
-        markerOptions.add(new MarkerOptions().title("Sir Louis Matheson Library!")
-                .position(new LatLng(-37.912858612729295, 145.1342749559564))
-                .snippet("Open duering: 10:00 - 20:30"));
-
-        markerOptions.add(new MarkerOptions().title("Law Library!")
-                .position(new LatLng(-37.914314629905554, 145.13507370653124))
-                .snippet("Open duering: 10:00 - 20:30"));
 
     }
 
@@ -87,16 +66,68 @@ public class MapActivity extends AppCompatActivity
         mMap = googleMap;
         // Add a marker in Monash Clayton, Australia,
         // and move the map's camera to the same location.
-//        LatLng monash = new LatLng(-37.907803, 145.133957);
-//        googleMap.addMarker(new MarkerOptions()
-//                .position(monash)
-//                .title("Monash Clayton"));
 
         for (MarkerOptions mark : markerOptions){
             mMap.addMarker(mark);
         }
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(centerLoaction, 12));
+//        OkHttpClient client = new OkHttpClient().newBuilder().build();
+//        StringBuilder stringBuilder = new StringBuilder("https://maps.googleapis.com/maps/api/place/findplacefromtext/json?");
+//        stringBuilder.append("input=library");
+//        stringBuilder.append("&inputtype=textquery");
+//        stringBuilder.append("&locationbias=circle%3A2000%40" + currentLocation.latitude + "%2C" + currentLocation.longitude);
+//        stringBuilder.append("&fields=formatted_address%2Cname%2Copening_hours%2Cgeometry");
+//        stringBuilder.append("&key=" + getResources().getString(R.string.map_api_key));
+//
+//        Request request = new Request.Builder()
+//                .url(stringBuilder.toString())
+//                .method("GET", null)
+//                .build();
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                if (response.isSuccessful()) {
+//                    String theResponse = response.body().string();
+//
+//                    MapActivity.this.runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Log.d("ms", theResponse);
+//                            try {
+//                                JSONObject jsonObject = null;
+//                                jsonObject = new JSONObject(theResponse);
+//
+//                                JSONArray jsonArray = jsonObject.getJSONArray("results");
+//
+//                                for (int i = 0; i < jsonArray.length(); i++) {
+//                                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//                                    JSONObject getLocation = jsonObject1.getJSONObject("geometry").getJSONObject("location");
+//
+//                                    String latitude = getLocation.getString("lat");
+//                                    String longitude = getLocation.getString("lng");
+//
+//                                    JSONObject getName = jsonArray.getJSONObject(i);
+//                                    String name = getName.getString("name");
+//
+//                                    LatLng latLng = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+//                                    mMap.addMarker(new MarkerOptions().title(name).position(latLng));
+//                                }
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    });
+//
+//                }
+//            }
+//        });
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
     }
 
 

@@ -30,9 +30,12 @@
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/all_book_fragment.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/all_book_item_layout.xml" value="0.8352713178294574" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/app_bar_main.xml" value="0.536" />
+        <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/fragment_map.xml" value="0.7007963594994312" />
+        <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/map_fragment.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/nav_header_main.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/read_popup_window.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/search_fragment.xml" value="0.4" />
+        <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/show_map_fragment.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/layout/sync_fragment.xml" value="0.18858131487889274" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/menu/menu_home.xml" value="1.7107142857142856" />
         <entry key="..\:/Users/60162/AndroidStudioProjects/DailyReader/app/src/main/res/menu/menu_main.xml" value="0.24947916666666667" />
@@ -45,11 +48,8 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_map.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_read.xml" value="0.1405775075987842" />
-        <entry key="app/src/main/res/layout/all_book_fragment.xml" value="0.15443840579710144" />
-        <entry key="app/src/main/res/layout/all_book_item_layout.xml" value="0.15443840579710144" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.15443840579710144" />
         <entry key="app/src/main/res/layout/item_layout.xml" value="0.26856884057971014" />
         <entry key="app/src/main/res/layout/logout_fragment.xml" value="0.1526268115942029" />
         <entry key="app/src/main/res/layout/map_fragment.xml" value="0.1526268115942029" />
