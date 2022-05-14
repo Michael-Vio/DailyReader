@@ -79,11 +79,6 @@ public class ViewFragment extends Fragment {
     //date for chart
     private String dateStart;
 
-    DatePicker datePicker;
-    int year; //今年
-    int month; //当前月份
-    int day; //今天
-
     String startDob = null;
     String endDob = null;
     //String arrTwoDateString[] = {"",""};
@@ -235,7 +230,7 @@ public class ViewFragment extends Fragment {
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        String date = dob; // 你要获取的日期
+        String date = dob; //
 
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();

@@ -75,9 +75,9 @@ public class AddFragment extends Fragment {
     private String dateStart;
 
     DatePicker datePicker;
-    int year; //今年
-    int month; //当前月份
-    int day; //今天
+    int year; //
+    int month; //
+    int day; //
 
     String startDob = null;
     String endDob = null;
@@ -237,7 +237,7 @@ public class AddFragment extends Fragment {
 
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         String userId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        String date = dob; // 你要获取的日期
+        String date = dob; //
 
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -347,96 +347,6 @@ public class AddFragment extends Fragment {
 
     }
 
-    public void generateDateRangerPicker(View view){
-
-        /*//获取当前的年月日
-        Calendar calendar= Calendar.getInstance(); //获取日历的实例
-        year=calendar.get(Calendar.YEAR);
-        month=calendar.get(Calendar.MONTH);//实际月份需要加1
-        day=calendar.get(Calendar.DATE);
-
-        //监听日期选择器
-        datePicker=(DatePicker)view.findViewById(R.id.datepicker);
-        datePicker.init(year,month,day,new DatePicker.OnDateChangedListener(){
-            @Override
-            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Log.e("datepicker—你选择的日期是：",year+"-"+(monthOfYear+1)+"-"+dayOfMonth);
-            }
-        });*/
-
-
-        // now register the text view and the button with
-        // their appropriate IDs
-        //mPickDateButton = view.findViewById(R.id.pick_date_button);
-        //mShowSelectedDateText = view.findViewById(R.id.show_selected_date);
-
-
-        // create the instance of the calendar to set the
-        // bounds
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-
-        // now set the starting bound from current month to
-        // previous MARCH
-        calendar.set(Calendar.MONTH, Calendar.MAY);
-        long may1 = calendar.getTimeInMillis();
-
-        // now set the ending bound from current month to
-        // DECEMBER
-        calendar.set(Calendar.MONTH, Calendar.MAY);
-        long may = calendar.getTimeInMillis();
-
-
-        // create the instance of the CalendarConstraints
-        // Builder
-        CalendarConstraints.Builder calendarConstraintBuilder = new CalendarConstraints.Builder();
-
-        // and set the start and end constraints (bounds)
-        calendarConstraintBuilder.setStart(may1);
-        calendarConstraintBuilder.setEnd(may);
-
-        // instantiate the Material date picker dialog
-        // builder
-        MaterialDatePicker.Builder<Pair<Long, Long>> materialDateBuilder = MaterialDatePicker.Builder.dateRangePicker();
-        materialDateBuilder.setTitleText("SELECT A DATE");
-
-        // now pass the constrained calendar builder to
-        // material date picker Calendar constraints
-        materialDateBuilder.setCalendarConstraints(calendarConstraintBuilder.build());
-
-        // now build the material date picker dialog
-        final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
-
-        // handle the Select date button to open the
-        // material date picker
-        mPickDateButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // show the material date picker with
-                        // supportable fragment manager to
-                        // interact with dialog material date
-                        // picker dialog fragments
-                        materialDatePicker.show(getChildFragmentManager(), "MATERIAL_DATE_PICKER");
-                    }
-                });
-
-        materialDatePicker.addOnPositiveButtonClickListener(
-                new MaterialPickerOnPositiveButtonClickListener() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onPositiveButtonClick(Object selection) {
-                        // now update the selected date preview
-                        mShowSelectedDateText.setText("Selected Date is : " + materialDatePicker.getHeaderText());
-                        dateStart = materialDatePicker.getHeaderText();
-                        Log.e("datepicker—你选择的日期是：",dateStart);
-                    }
-                });
-
-    }
-
-
-
-
     public List<DataEntry> createData()
     {
         List<DataEntry> data1 = new ArrayList<>();
@@ -455,38 +365,6 @@ public class AddFragment extends Fragment {
 
     }
 
-    /*    public void generateDatePicker(View view){
-
-        tvw=view.findViewById(R.id.textView1);
-        eText=view.findViewById(R.id.editText1);
-        eText.setInputType(InputType.TYPE_NULL);
-        eText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar cldr = Calendar.getInstance();
-                int day = cldr.get(Calendar.DAY_OF_MONTH);
-                int month = cldr.get(Calendar.MONTH);
-                int year = cldr.get(Calendar.YEAR);
-
-                // date picker dialog
-                picker = new DatePickerDialog(AddFragment.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                eText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                            }
-                        }, year, month, day);
-                picker.show();
-            }
-        });
-        btnGet=view.findViewById(R.id.button1);
-        btnGet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tvw.setText("Selected Date: "+ eText.getText());
-            }
-        });
-    }*/
 
     @Override
     public void onDestroyView() {
