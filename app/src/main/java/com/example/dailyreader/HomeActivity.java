@@ -52,7 +52,6 @@ public class HomeActivity extends AppCompatActivity {
                 R.id.nav_logout_fragment,
                 R.id.nav_map_fragment,
                 R.id.nav_report_fragment,
-                R.id.nav_weather_fragment,
                 R.id.nav_sync_fragment,
                 R.id.nav_search_fragment)
                 .setOpenableLayout(binding.drawerLayout)

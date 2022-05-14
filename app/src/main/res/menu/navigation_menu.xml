@@ -12,12 +12,6 @@
             android:id="@+id/nav_add_book_fragment"
             android:title="Add Book" />
         <item
-            android:id="@+id/nav_sync_fragment"
-            android:title="Sync to Calendar" />
-        <item
-            android:id="@+id/nav_weather_fragment"
-            android:title="Weather" />
-        <item
             android:id="@+id/nav_map_fragment"
             android:title="Map" />
         <item
@@ -26,6 +20,9 @@
         <item
             android:id="@+id/nav_search_fragment"
             android:title="Search" />
+        <item
+            android:id="@+id/nav_sync_fragment"
+            android:title="Sync to Calendar" />
         <item
             android:id="@+id/nav_logout_fragment"
             android:title="Logout" />
