@@ -92,18 +92,7 @@ public class ViewFragment extends Fragment {
         binding = ViewFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        if(startDob == null){
-            Toast.makeText(getContext(), "Please set all date first! " +
-                    "Chart will not be generated while no reading time on date!", Toast.LENGTH_LONG).show();
-        }
-        try{
-
-            receiveStringDobAndGeneratePieChart(view);
-
-        }catch (NullPointerException e){
-            e.printStackTrace();
-            return view;
-        }
+        receiveStringDobAndGeneratePieChart(view);
 
         return view;
     }
