@@ -5,27 +5,27 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+
 import com.example.dailyreader.R;
 import com.example.dailyreader.UploadWorker;
 import com.example.dailyreader.WeatherApi;
 import com.example.dailyreader.adapter.AllBookFragmentAdapter;
 import com.example.dailyreader.databinding.AllBookFragmentBinding;
-import com.example.dailyreader.entity.Book;
 import com.example.dailyreader.viewmodel.BookViewModel;
+
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,9 +56,7 @@ public class AllBookFragment extends Fragment {
         bookViewModel.getAllBooks().observe(getViewLifecycleOwner(), books -> adapter.setBooks(books));
 
         binding.allBookRecyclerView.addItemDecoration(new DividerItemDecoration(requireContext(),LinearLayoutManager.VERTICAL));
-
         binding.allBookRecyclerView.setHasFixedSize(true);
-
 
         //Set Marquee
         TextView text_view = view.findViewById(R.id.weatherHello);
@@ -87,9 +85,10 @@ public class AllBookFragment extends Fragment {
                 int humidity = weatherRoot.getMain().getHumidity();
 
                 //show temp
-                binding.weatherHello.setText("Melbourne temperature(C): "+ String.valueOf((int)temp)
-                                                + "   Atmospheric pressure in Melbourne: " + String.valueOf(pressure) + "hPa"
-                                                +"    Humidity in Melbourne: " + String.valueOf(humidity) + "%");
+                String weather = "Melbourne temperature(C): "+ String.valueOf((int)temp)
+                        + "   Atmospheric pressure in Melbourne: " + String.valueOf(pressure) + "hPa"
+                        +"    Humidity in Melbourne: " + String.valueOf(humidity) + "%";
+                binding.weatherHello.setText(weather);
 
 
                 /*binding.weatherTemp.setText("Melbourne temperature(C): "+ String.valueOf((int)temp));
@@ -105,16 +104,10 @@ public class AllBookFragment extends Fragment {
 
         });
 
+        // Initialize the WorkManager
         WorkManager workManager = WorkManager.getInstance(requireContext());
-//        Constraints constraints = new Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build();
         PeriodicWorkRequest uploadWorkRequest = new PeriodicWorkRequest.Builder(UploadWorker.class, 24, TimeUnit.HOURS).build();
-
-        binding.startWorkManager.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                workManager.enqueue(uploadWorkRequest);
-            }
-        });
+        binding.startWorkManager.setOnClickListener(v -> workManager.enqueue(uploadWorkRequest));
 
         return view;
     }

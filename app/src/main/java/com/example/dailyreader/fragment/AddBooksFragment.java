@@ -97,18 +97,15 @@ public class AddBooksFragment extends Fragment{
             }
         });
 
-        addBooksBinding.backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!parentFolder.getAbsoluteFile().equals(Environment.getExternalStorageDirectory())) {
-                    parentFolder = parentFolder.getParentFile();
-                    assert parentFolder != null;
-                    currentFiles = parentFolder.listFiles();
-                    assert currentFiles != null;
-                    createListView(currentFiles);
-                } else {
-                    Toast.makeText(getContext(), "This is the root", Toast.LENGTH_SHORT).show();
-                }
+        addBooksBinding.backBtn.setOnClickListener(v -> {
+            if (!parentFolder.getAbsoluteFile().equals(Environment.getExternalStorageDirectory())) {
+                parentFolder = parentFolder.getParentFile();
+                assert parentFolder != null;
+                currentFiles = parentFolder.listFiles();
+                assert currentFiles != null;
+                createListView(currentFiles);
+            } else {
+                Toast.makeText(getContext(), "This is the root", Toast.LENGTH_SHORT).show();
             }
         });
 

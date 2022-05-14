@@ -53,6 +53,8 @@ public class AllBookFragmentAdapter extends RecyclerView.Adapter<AllBookFragment
         if (readGoal != 0) {
             String goal = "Your daily reading goal is " + readGoal + " pages";
             holder.goalView.setText(goal);
+        } else {
+            holder.goalView.setText(R.string.goal_view);
         }
 
         holder.itemView.setTag(position);
@@ -87,10 +89,8 @@ public class AllBookFragmentAdapter extends RecyclerView.Adapter<AllBookFragment
         Button ok = contentView.findViewById(R.id.ok_btn);
         ok.setOnClickListener(v -> {
             int goal = readGoal.getValue();
-            if (goal != 0) {
-                book.setReadGoal(goal);
-                bookViewModel.update(book);
-            }
+            book.setReadGoal(goal);
+            bookViewModel.update(book);
         });
 
         popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);

@@ -32,7 +32,7 @@ public class MapFragment extends Fragment {
 
         location = mapBinding.outputLocation;
         openMap = mapBinding.mapBtn;
-
+        // check whether the location is valid, if valid show it on the map
         openMap.setOnClickListener(v -> {
             if (!location.getText().toString().isEmpty()){
                 Intent intent = new Intent();

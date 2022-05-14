@@ -2,24 +2,23 @@ package com.example.dailyreader.DAO;
 
 
 import androidx.annotation.NonNull;
+
 import com.example.dailyreader.entity.ReadTime;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
 import java.util.HashMap;
 
 
 public class ReadTimeFirebaseDAO {
     private final DatabaseReference databaseReference;
-    private String date;
 
     public ReadTimeFirebaseDAO(String userId, String date)
     {
-        this.date = date;
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference("User").child(userId).child("ReadTimeRecords").child(date);
     }
@@ -55,14 +54,6 @@ public class ReadTimeFirebaseDAO {
 
             }
         });
-    }
-
-    public Query get() {
-        if (date == null) {
-            return null;
-        } else {
-            return databaseReference.orderByKey().startAfter(date).limitToFirst(7);
-        }
     }
 
 }
