@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -21,18 +22,9 @@ import com.example.dailyreader.UploadWorker;
 import com.example.dailyreader.WeatherApi;
 import com.example.dailyreader.adapter.AllBookFragmentAdapter;
 import com.example.dailyreader.databinding.AllBookFragmentBinding;
-import com.example.dailyreader.entity.ReadTime;
-import com.example.dailyreader.repository.ReadTimeRepository;
 import com.example.dailyreader.viewmodel.BookViewModel;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -98,11 +90,6 @@ public class AllBookFragment extends Fragment {
                         + "   Atmospheric pressure in Melbourne: " + String.valueOf(pressure) + "hPa"
                         +"    Humidity in Melbourne: " + String.valueOf(humidity) + "%";
                 binding.weatherHello.setText(weather);
-
-
-                /*binding.weatherTemp.setText("Melbourne temperature(C): "+ String.valueOf((int)temp));
-                binding.pressure.setText("Atmospheric pressure in Melbourne(hPa): " + String.valueOf(pressure));
-                binding.humidity.setText("Humidity in Melbourne(%):" + String.valueOf(humidity));*/
             }
 
             @Override
@@ -116,7 +103,11 @@ public class AllBookFragment extends Fragment {
         // Initialize the WorkManager
         WorkManager workManager = WorkManager.getInstance(requireContext());
         PeriodicWorkRequest uploadWorkRequest = new PeriodicWorkRequest.Builder(UploadWorker.class, 24, TimeUnit.HOURS).build();
-        binding.startWorkManager.setOnClickListener(v -> workManager.enqueue(uploadWorkRequest));
+        binding.startWorkManager.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Sync to firebase", Toast.LENGTH_SHORT).show();
+            workManager.enqueue(uploadWorkRequest);
+        });
+
 
         return view;
     }
